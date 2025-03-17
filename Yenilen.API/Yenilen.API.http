@@ -1,0 +1,6 @@
+@Yenilen.API_HostAddress = http://localhost:5001
+
+GET {{Yenilen.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
