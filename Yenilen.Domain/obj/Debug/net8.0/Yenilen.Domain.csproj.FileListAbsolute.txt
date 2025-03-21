@@ -1,0 +1,12 @@
+/Users/furkansakizci/Desktop/YenilenCom-API/Yenilen/Yenilen.Domain/bin/Debug/net8.0/Yenilen.Domain.deps.json
+/Users/furkansakizci/Desktop/YenilenCom-API/Yenilen/Yenilen.Domain/bin/Debug/net8.0/Yenilen.Domain.dll
+/Users/furkansakizci/Desktop/YenilenCom-API/Yenilen/Yenilen.Domain/bin/Debug/net8.0/Yenilen.Domain.pdb
+/Users/furkansakizci/Desktop/YenilenCom-API/Yenilen/Yenilen.Domain/obj/Debug/net8.0/Yenilen.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/furkansakizci/Desktop/YenilenCom-API/Yenilen/Yenilen.Domain/obj/Debug/net8.0/Yenilen.Domain.AssemblyInfoInputs.cache
+/Users/furkansakizci/Desktop/YenilenCom-API/Yenilen/Yenilen.Domain/obj/Debug/net8.0/Yenilen.Domain.AssemblyInfo.cs
+/Users/furkansakizci/Desktop/YenilenCom-API/Yenilen/Yenilen.Domain/obj/Debug/net8.0/Yenilen.Domain.csproj.CoreCompileInputs.cache
+/Users/furkansakizci/Desktop/YenilenCom-API/Yenilen/Yenilen.Domain/obj/Debug/net8.0/Yenilen.Domain.sourcelink.json
+/Users/furkansakizci/Desktop/YenilenCom-API/Yenilen/Yenilen.Domain/obj/Debug/net8.0/Yenilen.Domain.dll
+/Users/furkansakizci/Desktop/YenilenCom-API/Yenilen/Yenilen.Domain/obj/Debug/net8.0/refint/Yenilen.Domain.dll
+/Users/furkansakizci/Desktop/YenilenCom-API/Yenilen/Yenilen.Domain/obj/Debug/net8.0/Yenilen.Domain.pdb
+/Users/furkansakizci/Desktop/YenilenCom-API/Yenilen/Yenilen.Domain/obj/Debug/net8.0/ref/Yenilen.Domain.dll
