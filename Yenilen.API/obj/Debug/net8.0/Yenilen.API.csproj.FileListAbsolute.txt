@@ -58,3 +58,4 @@
 /Users/furkansakizci/Desktop/YenilenCom-API/Yenilen/Yenilen.API/bin/Debug/net8.0/Yenilen.Application.pdb
 /Users/furkansakizci/Desktop/YenilenCom-API/Yenilen/Yenilen.API/bin/Debug/net8.0/Yenilen.Infrastructure.pdb
 /Users/furkansakizci/Desktop/YenilenCom-API/Yenilen/Yenilen.API/bin/Debug/net8.0/Yenilen.Domain.pdb
+/Users/furkansakizci/Desktop/YenilenCom-API/Yenilen/Yenilen.API/bin/Debug/net8.0/TS.Result.dll

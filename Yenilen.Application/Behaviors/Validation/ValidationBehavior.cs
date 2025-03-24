@@ -39,11 +39,7 @@ public sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<
 
         if (errorDictionary.Any())
         {
-            var errors = errorDictionary.Select(s => new ValidationFailure
-            {
-                PropertyName = s.Value,
-                ErrorCode = s.Key
-            });
+            var errors = errorDictionary.Select(s => new ValidationFailure(s.Key, s.Value));
             throw new ValidationException(errors);
         }
 
