@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Yenilen.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0a26a1dd32ff7c89aad5571f57aa65a6fec28672")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f81902a981315a62cc06345e37a1938b45f1b363")]
 [assembly: System.Reflection.AssemblyProductAttribute("Yenilen.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Yenilen.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
