@@ -1,6 +1,7 @@
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.RateLimiting;
-using Yenilen.API;
+using Yenilen.API.Middlewares;
+using Yenilen.API.Shared;
 using Yenilen.Application.Common.Mapping;
 using Yenilen.Infrastructure;
 using Yenilen.Application;
@@ -8,7 +9,6 @@ using Yenilen.Application;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -18,7 +18,7 @@ builder.Services.AddControllers();
 
 //Mediatr service
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ApplicationRegistrar).Assembly));
-
+builder.Services.AddApplication();
 builder.Services.AddRateLimiter(x =>
     x.AddFixedWindowLimiter("fixed", cfg =>
     {
@@ -28,8 +28,7 @@ builder.Services.AddRateLimiter(x =>
         cfg.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
     }));
 
-//builder.Services.AddApplication();
-builder.Services.AddExceptionHandler<ExceptionHandler>().AddProblemDetails();
+//builder.Services.AddExceptionHandler<ExceptionHandler>().AddProblemDetails();
 
 var app = builder.Build();
 
@@ -41,6 +40,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseExceptionHandler();
+
+app.UseGlobalExceptionHandling();
+
 app.MapControllers().RequireRateLimiting("fixed");
 app.Run();

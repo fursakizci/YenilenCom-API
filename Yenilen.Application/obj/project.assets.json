@@ -150,6 +150,15 @@
           "buildTransitive/net6.0/_._": {}
         }
       },
+      "TS.Result/8.0.13": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/TS.Result.dll": {}
+        },
+        "runtime": {
+          "lib/net8.0/TS.Result.dll": {}
+        }
+      },
       "Yenilen.Domain/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
@@ -377,6 +386,21 @@
         "useSharedDesignerContext.txt"
       ]
     },
+    "TS.Result/8.0.13": {
+      "sha512": "slbjsPl1Fd/R9fX8yv09V04pSfSgaG0bWGEQ71s5E2Ud5ZY5DpIUezJDp+a0ZnpTiREgVJORbyiZ6vUepOoVkg==",
+      "type": "package",
+      "path": "ts.result/8.0.13",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "README.md",
+        "icon.jpg",
+        "lib/net8.0/TS.Result.dll",
+        "ts.result.8.0.13.nupkg.sha512",
+        "ts.result.nuspec"
+      ]
+    },
     "Yenilen.Domain/1.0.0": {
       "type": "project",
       "path": "../Yenilen.Domain/Yenilen.Domain.csproj",
@@ -388,6 +412,7 @@
       "AutoMapper >= 14.0.0",
       "FluentValidation.AspNetCore >= 11.3.0",
       "MediatR >= 12.4.1",
+      "TS.Result >= 8.0.13",
       "Yenilen.Domain >= 1.0.0"
     ]
   },
@@ -448,6 +473,10 @@
           "MediatR": {
             "target": "Package",
             "version": "[12.4.1, )"
+          },
+          "TS.Result": {
+            "target": "Package",
+            "version": "[8.0.13, )"
           }
         },
         "imports": [

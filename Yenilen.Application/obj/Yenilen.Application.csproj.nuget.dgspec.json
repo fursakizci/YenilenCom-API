@@ -58,6 +58,10 @@
             "MediatR": {
               "target": "Package",
               "version": "[12.4.1, )"
+            },
+            "TS.Result": {
+              "target": "Package",
+              "version": "[8.0.13, )"
             }
           },
           "imports": [

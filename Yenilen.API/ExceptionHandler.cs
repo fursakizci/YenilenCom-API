@@ -1,7 +1,7 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
 
-namespace Yenilen.API;
+namespace Yenilen.API.Shared;
 
 public class ExceptionHandler:IExceptionHandler
 {

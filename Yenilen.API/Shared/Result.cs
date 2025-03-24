@@ -1,4 +1,4 @@
-namespace Yenilen.API;
+namespace Yenilen.API.Shared;
 
 public class Result<T>
 {
