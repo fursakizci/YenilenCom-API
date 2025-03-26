@@ -17,7 +17,7 @@ public class UserController:Controller
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetUserById(Guid id)
+    public async Task<IActionResult> GetUserById(int id)
     {
         var user = await _mediator.Send(new GetByIdUserQuery(id));
         if (user == null) return NotFound(new { message = "Kullanici Bulunamadi." });
@@ -30,8 +30,4 @@ public class UserController:Controller
         var userId = await _mediator.Send(command);
         return Ok(new { Id = userId });
     }
-    
-    
-    
-    
 }

@@ -15,7 +15,12 @@ public class GenericRepository<TEntity>:IGenericRepository<TEntity> where TEntit
         _context = context ?? throw new ArgumentNullException(nameof(context));
         _dbSet = _context.Set<TEntity>();
     }
-    
+
+    public async Task<TEntity?> GetByIdAsync(int id)
+    {
+        return await _dbSet.FindAsync(id);
+    }
+
     public async Task<TEntity?> GetByIdAsync(Guid id)
     {
         return await _dbSet.FindAsync(id);

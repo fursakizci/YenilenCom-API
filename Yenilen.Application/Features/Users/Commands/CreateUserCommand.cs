@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Yenilen.Application.Features.Users.Commands;
 
-public class CreateUserCommand:IRequest<Guid>
+public class CreateUserCommand:IRequest<int>
 {
     public string Name { get; set; } = string.Empty;
     public string Surname { get; set; }= string.Empty;
