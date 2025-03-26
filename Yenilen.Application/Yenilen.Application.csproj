@@ -17,6 +17,7 @@
       <Folder Include="Auth\" />
       <Folder Include="Features\Stores\Commands\" />
       <Folder Include="Features\Stores\Queries\" />
+      <Folder Include="Features\Tag\Commands\" />
     </ItemGroup>
 
     <ItemGroup>

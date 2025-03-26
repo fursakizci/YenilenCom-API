@@ -7,7 +7,7 @@ using Yenilen.Domain.Entities;
 
 namespace Yenilen.Application.Features.Users.Handlers;
 
-internal class CreateUserHandler:IRequestHandler<CreateUserCommand, Guid>
+internal class CreateUserHandler:IRequestHandler<CreateUserCommand, int>
 {
 
     private readonly IUserRepository _userRepository;
@@ -19,7 +19,7 @@ internal class CreateUserHandler:IRequestHandler<CreateUserCommand, Guid>
         _mapper = mapper;
     }
     
-    public async Task<Guid> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+    public async Task<int> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
         var isUserExists = await _userRepository.IsExistsAsync(request.PhoneNumber, request.Email);
         

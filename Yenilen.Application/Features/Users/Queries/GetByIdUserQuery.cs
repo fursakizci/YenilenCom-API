@@ -5,9 +5,9 @@ namespace Yenilen.Application.Features.Users.Queries;
 
 public class GetByIdUserQuery :IRequest<UserDto>
 {
-    public Guid UserId { get; }
+    public int UserId { get; }
 
-    public GetByIdUserQuery(Guid userId)
+    public GetByIdUserQuery(int userId)
     {
         UserId = userId;
     }

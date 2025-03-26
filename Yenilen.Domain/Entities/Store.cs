@@ -15,6 +15,4 @@ public class Store:BaseEntity
     public ICollection<Date> OpeningTimes { get; set; }
     public ICollection<Image> Images { get; set; }
     public ICollection<Tag> Tags { get; set; }
-   
-    
 }

@@ -4,9 +4,12 @@ public class BaseEntity
 {
     public BaseEntity()
     {
-        Id = Guid.NewGuid();
+        Uuid = Guid.NewGuid();
+        CreatedAt = DateTime.UtcNow;
+        IsActive = true;
     }
-    public Guid Id { get; set; }
+    public int Id { get; set; }
+    public Guid Uuid { get; set; }
     public bool IsActive { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
