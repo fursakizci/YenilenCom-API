@@ -1,9 +1,9 @@
 using MediatR;
 using Yenilen.Application.DTOs;
 
-namespace Yenilen.Application.Features.Users.Queries;
+namespace Yenilen.Application.Features.User.Queries;
 
-public class GetByIdUserQuery :IRequest<UserDto>
+public class GetByIdUserQuery:IRequest<UserDto>
 {
     public int UserId { get; }
 

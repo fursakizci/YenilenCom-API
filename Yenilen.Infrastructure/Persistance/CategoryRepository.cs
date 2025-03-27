@@ -7,7 +7,16 @@ namespace Yenilen.Infrastructure.Persistance;
 
 public class CategoryRepository:GenericRepository<Category>,ICategoryRepository
 {
+    private readonly AppDbContext _context;
+    private readonly DbSet<Category> _dbSet;
     public CategoryRepository(AppDbContext context) : base(context)
     {
+        _context = context ?? throw new ArgumentNullException(nameof(context));
+        _dbSet = _context.Set<Category>();
+    }
+
+    public async Task<IEnumerable<Category>> GetAllCategoriesByStoreId(int id)
+    {
+        return await _dbSet.Where(c => c.StoreId == id).ToListAsync();
     }
 }

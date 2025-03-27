@@ -8,11 +8,11 @@ namespace Yenilen.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class TagController:ControllerBase
+public class SearchController:ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public TagController(IMediator mediator)
+    public SearchController(IMediator mediator)
     {
         _mediator = mediator;
     }

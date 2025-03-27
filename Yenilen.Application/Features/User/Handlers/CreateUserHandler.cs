@@ -5,7 +5,7 @@ using Yenilen.Application.Features.Users.Commands;
 using Yenilen.Application.Interfaces;
 using Yenilen.Domain.Entities;
 
-namespace Yenilen.Application.Features.Users.Handlers;
+namespace Yenilen.Application.Features.User.Handlers;
 
 internal class CreateUserHandler:IRequestHandler<CreateUserCommand, int>
 {
@@ -26,7 +26,7 @@ internal class CreateUserHandler:IRequestHandler<CreateUserCommand, int>
         if(isUserExists)
             throw new InvalidOperationException("Girdiğiniz kullanıcıya ait telefon numarası ya da email sistemde kayıtlıdır.");
         
-        var user = _mapper.Map<User>(request);
+        var user = _mapper.Map<Domain.Entities.User>(request);
 
         await _userRepository.AddAsync(user);
         return user.Id;

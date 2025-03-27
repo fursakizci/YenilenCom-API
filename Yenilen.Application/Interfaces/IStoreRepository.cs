@@ -4,5 +4,5 @@ namespace Yenilen.Application.Interfaces;
 
 public interface IStoreRepository:IGenericRepository<Store>
 {
-    
+    Task<string> GetStoreFullAddressById(int id);
 }

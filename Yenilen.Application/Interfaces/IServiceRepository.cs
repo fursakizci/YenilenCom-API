@@ -4,5 +4,5 @@ namespace Yenilen.Application.Interfaces;
 
 public interface IServiceRepository:IGenericRepository<Service>
 {
-    
+    Task<IEnumerable<Service>> GetServicesByCategoryIdAsync(int id);
 }

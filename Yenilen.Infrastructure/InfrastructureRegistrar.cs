@@ -23,6 +23,8 @@ public static class InfrastructureRegistrar
             .AsImplementedInterfaces()//interface ile implemente olanlari alma
             .WithScopedLifetime() //scoped atamis olduk.
         );
+        
+        
 
         return services;
     }
