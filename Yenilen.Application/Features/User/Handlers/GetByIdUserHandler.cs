@@ -1,9 +1,9 @@
 using MediatR;
 using Yenilen.Application.DTOs;
-using Yenilen.Application.Features.Users.Queries;
+using Yenilen.Application.Features.User.Queries;
 using Yenilen.Application.Interfaces;
 
-namespace Yenilen.Application.Features.Users.Handlers;
+namespace Yenilen.Application.Features.User.Handlers;
 
 public class GetByIdUserHandler: IRequestHandler<GetByIdUserQuery,UserDto>
 {
@@ -22,9 +22,9 @@ public class GetByIdUserHandler: IRequestHandler<GetByIdUserQuery,UserDto>
 
         return new UserDto
         {
-            Name = user.Name,
+            Name = user.FirstName,
             Surname = user.Surname,
-            PhoneNumber = user.PhoneNumber,
+            Phone = user.PhoneNumber,
             Email = user.Email,
             DateOfBirth = user.DateOfBirth,
             Sex = user.Sex

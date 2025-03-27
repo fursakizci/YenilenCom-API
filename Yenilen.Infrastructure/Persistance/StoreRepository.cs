@@ -15,4 +15,16 @@ public class StoreRepository:GenericRepository<Store>,IStoreRepository
         _context = context ?? throw new ArgumentNullException(nameof(context));
         _dbSet = _context.Set<Store>();
     }
+
+    public async Task<string> GetStoreFullAddressById(int id)
+    {
+        var store = await _dbSet.Include(
+                s => s.Address)
+            .FirstOrDefaultAsync(s => s.Id == id);
+
+        if (store == null || store.Address == null)
+            return string.Empty;
+
+        return store.Address.FullAddress;
+    }
 }

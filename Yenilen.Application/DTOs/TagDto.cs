@@ -2,6 +2,6 @@ namespace Yenilen.Application.DTOs;
 
 public class TagDto
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
     public string Name { get; set; }
 }

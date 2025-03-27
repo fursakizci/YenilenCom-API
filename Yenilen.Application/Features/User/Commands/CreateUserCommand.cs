@@ -5,7 +5,7 @@ namespace Yenilen.Application.Features.Users.Commands;
 
 public class CreateUserCommand:IRequest<int>
 {
-    public string Name { get; set; } = string.Empty;
+    public string FirstName { get; set; } = string.Empty;
     public string Surname { get; set; }= string.Empty;
     public string PhoneNumber { get; set; }= string.Empty;
     public string Email { get; set; }= string.Empty;
@@ -17,7 +17,7 @@ public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
 {
     public CreateUserCommandValidator()
     {
-        RuleFor(x => x.Name)
+        RuleFor(x => x.FirstName)
             .NotEmpty().WithMessage("Ad alanı boş olamaz.")
             .MinimumLength(3).WithMessage("Ad alanı en az 3 karakter olmalıdır.");
 

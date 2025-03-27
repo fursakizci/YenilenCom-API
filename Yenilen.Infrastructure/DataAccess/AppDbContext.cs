@@ -20,4 +20,5 @@ public class AppDbContext:DbContext
     public DbSet<Service> Services { get; set; }
     public DbSet<Staff> StaffMembers { get; set; }
     public DbSet<Tag> Tags { get; set; }
+    public DbSet<Image> Images { get; set; }
 }
