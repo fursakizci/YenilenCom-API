@@ -24,32 +24,31 @@ public class GetProfileByIdHandler : IRequestHandler<GetProfileByIdQuery, Profil
         {
             Id = user.Id.ToString(),
             Name = user.FirstName,
-            Surname = user.Surname,
+            Surname = user.LastName,
             Phone = user.PhoneNumber,
             Email = user.Email,
             DateOfBirth = user.DateOfBirth.ToString("dd/MM/yyyy"),
-            Sex = user.Sex,
+            Sex = user.Gender.ToString(),
             Address = user.Addresses != null
                 ? user.Addresses.Select(a => new AddressDto
                 {
-                    Id = a.Id.ToString(),
+                    //Id = a.Id.ToString(),
                     Label = a.Label,
                     FullAddress = a.FullAddress,
-                    latitude = a.latitude,
-                    longitude = a.longitude,
+                    latitude = a.Latitude,
+                    longitude = a.Longitude,
                     CountryCode = a.CountryCode,
                     Country = a.Country,
                     City = a.City,
                     District = a.District,
-                    Neighbourhood = a.Neighbourhood,
                     Region = a.Region,
                     PostCode = a.PostCode
                 }).ToList()
                 : new List<AddressDto>(),
-            Image = user.Image != null
+            Image = user.AvatarUrl != null
                 ? new ImageDto
                 {
-                    Url = user.Image.ImageUrl
+                    Url = user.AvatarUrl.ImageUrl
                 }
                 : null
         };

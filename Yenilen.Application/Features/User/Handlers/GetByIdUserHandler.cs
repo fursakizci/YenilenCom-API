@@ -23,11 +23,11 @@ public class GetByIdUserHandler: IRequestHandler<GetByIdUserQuery,UserDto>
         return new UserDto
         {
             Name = user.FirstName,
-            Surname = user.Surname,
+            Surname = user.LastName,
             Phone = user.PhoneNumber,
             Email = user.Email,
             DateOfBirth = user.DateOfBirth,
-            Sex = user.Sex
+            Gender = user.Gender.ToString()
         };
     }
 }

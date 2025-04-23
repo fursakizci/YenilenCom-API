@@ -4,7 +4,7 @@ public class FavouriteDto
 {
     public string Id { get; set; }
     public string Name { get; set; }
-    public float Rating { get; set; }
+    public decimal Rating { get; set; }
     public int ReviewCount { get; set; }
     public string ImageUrl { get; set; }
     public string FullAddress { get; set; }

@@ -6,11 +6,11 @@ namespace Yenilen.Application.Features.Users.Commands;
 public class CreateUserCommand:IRequest<int>
 {
     public string FirstName { get; set; } = string.Empty;
-    public string Surname { get; set; }= string.Empty;
+    public string LastName { get; set; }= string.Empty;
     public string PhoneNumber { get; set; }= string.Empty;
     public string Email { get; set; }= string.Empty;
     public DateTime DateOfBirth { get; set; }
-    public string Sex { get; set; }= string.Empty;
+    public string Gender { get; set; }= string.Empty;
 }
 
 public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
@@ -21,7 +21,7 @@ public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
             .NotEmpty().WithMessage("Ad alanı boş olamaz.")
             .MinimumLength(3).WithMessage("Ad alanı en az 3 karakter olmalıdır.");
 
-        RuleFor(x => x.Surname)
+        RuleFor(x => x.LastName)
             .NotEmpty().WithMessage("Soyad alanı boş olamaz.")
             .MinimumLength(3).WithMessage("Soyad alanı en az 3 karakter olmalıdır.");
 
@@ -36,10 +36,10 @@ public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
         RuleFor(x => x.DateOfBirth)
             .LessThan(DateTime.Now).WithMessage("Doğum tarihi gelecekte olamaz.");
 
-        RuleFor(x => x.Sex)
+        RuleFor(x => x.Gender)
             .NotEmpty().WithMessage("Cinsiyet alanı zorunludur.")
-            .Must(x => x.Equals("Erkek", StringComparison.OrdinalIgnoreCase) ||
-                       x.Equals("Kadın", StringComparison.OrdinalIgnoreCase))
+            .Must(x => x.Equals("Male", StringComparison.OrdinalIgnoreCase) ||
+                       x.Equals("Female", StringComparison.OrdinalIgnoreCase))
             .WithMessage("Cinsiyet 'Erkek' veya 'Kadın' olmalıdır.");
     }
 }

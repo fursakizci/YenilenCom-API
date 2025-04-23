@@ -30,7 +30,7 @@ public class UserRepository : GenericRepository<User>, IUserRepository
 
         return await _dbSet
             .Include(u => u.Addresses)
-            .Include(u => u.Image)
+            .Include(u => u.AvatarUrl)
             .FirstOrDefaultAsync(u => u.Id == id);
     }
 

@@ -12,8 +12,8 @@ public static class InfrastructureRegistrar
     {
         services.AddDbContext<AppDbContext>(opt =>
         {
-            string connectionString = configuration.GetConnectionString("InMemoryDatabase")!;
-            opt.UseInMemoryDatabase(connectionString);
+            string connectionString = configuration.GetConnectionString("DefaultConnection")!;
+            opt.UseNpgsql(connectionString);
         });
 
         services.Scan(opt => opt.
