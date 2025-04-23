@@ -21,4 +21,10 @@ public class AppDbContext:DbContext
     public DbSet<Staff> StaffMembers { get; set; }
     public DbSet<Tag> Tags { get; set; }
     public DbSet<Image> Images { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+        base.OnModelCreating(modelBuilder);
+    }
 }

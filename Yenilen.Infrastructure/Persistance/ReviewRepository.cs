@@ -21,7 +21,7 @@ public class ReviewRepository:GenericRepository<Review>,IReviewRepository
         return await _dbSet.CountAsync(r => r.StoreId == id);
     }
 
-    public async Task<float> GetStoreRatingByStoreId(int id)
+    public async Task<decimal> GetStoreRatingByStoreId(int id)
     {
         var hasAny = await _context.Reviews.AnyAsync(r => r.StoreId == id);
 

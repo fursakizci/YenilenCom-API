@@ -7,6 +7,7 @@ public class BaseEntity
         Uuid = Guid.NewGuid();
         CreatedAt = DateTime.UtcNow;
         IsActive = true;
+        IsDeleted = false;
     }
     public int Id { get; set; }
     public Guid Uuid { get; set; }

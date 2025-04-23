@@ -39,7 +39,6 @@ public class GetAllFavouritesByUserIdHandler:IRequestHandler<GetAllFavouritesByU
                 Name = favorite.Store.Name,
                 Rating = storeRating,
                 ReviewCount = reviewCount,
-                ImageUrl = favorite.ImageUrl,
                 FullAddress = storeAddress
             });
         }
