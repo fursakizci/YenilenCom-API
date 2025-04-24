@@ -49,11 +49,11 @@ app.UseGlobalExceptionHandling();
 app.MapControllers().RequireRateLimiting("fixed");
 
 //Seed data uretmek icin
-using (var scope = app.Services.CreateScope())
-{
-    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    //SeedData(context);
-}
+// using (var scope = app.Services.CreateScope())
+// {
+//     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+//     //SeedData(context);
+// }
 
 app.Run();
 

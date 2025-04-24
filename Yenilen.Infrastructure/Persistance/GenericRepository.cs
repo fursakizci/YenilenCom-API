@@ -4,15 +4,17 @@ using Yenilen.Infrastructure.DataAccess;
 
 namespace Yenilen.Infrastructure.Persistance;
 
-public class GenericRepository<TEntity>:IGenericRepository<TEntity> where TEntity : class
+public class GenericRepository<TEntity, TContext>:IGenericRepository<TEntity>
+    where TEntity : class
+    where TContext : DbContext
 {
 
-    private readonly AppDbContext _context;
+    private readonly TContext _context;
     private readonly DbSet<TEntity> _dbSet;
 
-    public GenericRepository(AppDbContext context)
+    public GenericRepository(TContext context)
     {
-        _context = context ?? throw new ArgumentNullException(nameof(context));
+        _context = context;
         _dbSet = _context.Set<TEntity>();
     }
 
@@ -34,8 +36,6 @@ public class GenericRepository<TEntity>:IGenericRepository<TEntity> where TEntit
     public async Task AddAsync(TEntity entity)
     {
         await _dbSet.AddAsync(entity);
-
-        await _context.SaveChangesAsync();
     }
 
     public async Task UpdateAsync(TEntity entity)
@@ -54,7 +54,5 @@ public class GenericRepository<TEntity>:IGenericRepository<TEntity> where TEntit
         }
         
         _dbSet.Remove(item);
-
-        await _context.SaveChangesAsync();
     }
 }

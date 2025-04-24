@@ -4,7 +4,7 @@ using Yenilen.Infrastructure.DataAccess;
 
 namespace Yenilen.Infrastructure.Persistance;
 
-public class AppointmentRepository:GenericRepository<Appointment>,IAppointmentRepository
+internal sealed class AppointmentRepository:GenericRepository<Appointment,AppDbContext>,IAppointmentRepository
 {
     public AppointmentRepository(AppDbContext context) : base(context)
     {

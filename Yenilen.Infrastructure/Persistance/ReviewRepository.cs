@@ -5,7 +5,7 @@ using Yenilen.Infrastructure.DataAccess;
 
 namespace Yenilen.Infrastructure.Persistance;
 
-public class ReviewRepository:GenericRepository<Review>,IReviewRepository
+internal sealed class ReviewRepository:GenericRepository<Review, AppDbContext>,IReviewRepository
 {
     private readonly AppDbContext _context;
     private readonly DbSet<Review> _dbSet;

@@ -4,7 +4,7 @@ using Yenilen.Infrastructure.DataAccess;
 
 namespace Yenilen.Infrastructure.Persistance;
 
-public class ImageRepository:GenericRepository<Image>,IImageRepository
+internal sealed class ImageRepository:GenericRepository<Image,AppDbContext>,IImageRepository
 {
     public ImageRepository(AppDbContext context) : base(context)
     {

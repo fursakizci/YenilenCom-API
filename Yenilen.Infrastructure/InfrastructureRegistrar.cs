@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Scrutor;
+using Yenilen.Application.Interfaces;
 using Yenilen.Infrastructure.DataAccess;
 
 namespace Yenilen.Infrastructure;
@@ -16,6 +17,8 @@ public static class InfrastructureRegistrar
             opt.UseNpgsql(connectionString);
         });
 
+        services.AddScoped<IUnitOfWork>(srv => srv.GetRequiredService<AppDbContext>());
+        
         services.Scan(opt => opt.
             FromAssemblies(typeof(InfrastructureRegistrar).Assembly) //dosya yoluna gore dependecylerin yolunu verir.
             .AddClasses(publicOnly: false)
