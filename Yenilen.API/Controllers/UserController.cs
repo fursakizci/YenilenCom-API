@@ -53,5 +53,17 @@ public class UserController:ControllerBase
         var userId = await _mediator.Send(command);
         return Ok(new { Id = userId });
     }
+
+    [HttpPost("{id}/address")]
+    public async Task<IActionResult> UserAddAddress([FromBody] AddUserAddressCommand command)
+    {
+        var userId = await _mediator.Send(command);
+        return Ok(new {Id = userId});
+    }
     
+    [HttpGet("addresses")]
+    public async Task<IActionResult> UserGetAddresses()
+    {
+        return Ok();
+    }
 }

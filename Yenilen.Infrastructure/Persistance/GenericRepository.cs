@@ -38,10 +38,10 @@ public class GenericRepository<TEntity>:IGenericRepository<TEntity> where TEntit
         await _context.SaveChangesAsync();
     }
 
-    public  Task UpdateAsync(TEntity entity)
+    public async Task UpdateAsync(TEntity entity)
     {
-        //TODO: Implement update logic 
-        throw new NotImplementedException();
+        _dbSet.Update(entity);
+        await _context.SaveChangesAsync();
     }
 
     public async Task DeleteAsync(Guid id)

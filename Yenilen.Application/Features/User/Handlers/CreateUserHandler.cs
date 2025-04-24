@@ -7,7 +7,7 @@ using Yenilen.Domain.Entities;
 
 namespace Yenilen.Application.Features.User.Handlers;
 
-internal class CreateUserHandler:IRequestHandler<CreateUserCommand, int>
+internal sealed class CreateUserHandler:IRequestHandler<CreateUserCommand, int>
 {
 
     private readonly IUserRepository _userRepository;

@@ -32,11 +32,11 @@ public class GetProfileByIdHandler : IRequestHandler<GetProfileByIdQuery, Profil
             Address = user.Addresses != null
                 ? user.Addresses.Select(a => new AddressDto
                 {
-                    //Id = a.Id.ToString(),
+                    Id = a.Id.ToString(),
                     Label = a.Label,
                     FullAddress = a.FullAddress,
-                    latitude = a.Latitude,
-                    longitude = a.Longitude,
+                    Latitude = a.Latitude,
+                    Longitude = a.Longitude,
                     CountryCode = a.CountryCode,
                     Country = a.Country,
                     City = a.City,

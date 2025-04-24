@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Yenilen.Application.Features.Users.Commands;
 
-public class CreateUserCommand:IRequest<int>
+public sealed class CreateUserCommand:IRequest<int>
 {
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; }= string.Empty;
@@ -13,7 +13,7 @@ public class CreateUserCommand:IRequest<int>
     public string Gender { get; set; }= string.Empty;
 }
 
-public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
+public sealed class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
 {
     public CreateUserCommandValidator()
     {
