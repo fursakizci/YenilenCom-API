@@ -4,7 +4,7 @@ using Yenilen.Infrastructure.DataAccess;
 
 namespace Yenilen.Infrastructure.Persistance;
 
-public class AddressRepository:GenericRepository<Address>,IAddressRepository
+internal sealed class AddressRepository:GenericRepository<Address,AppDbContext>,IAddressRepository
 {
     public AddressRepository(AppDbContext context) : base(context)
     {

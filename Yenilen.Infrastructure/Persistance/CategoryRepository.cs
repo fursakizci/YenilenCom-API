@@ -5,7 +5,7 @@ using Yenilen.Infrastructure.DataAccess;
 
 namespace Yenilen.Infrastructure.Persistance;
 
-public class CategoryRepository:GenericRepository<Category>,ICategoryRepository
+internal sealed class CategoryRepository:GenericRepository<Category,AppDbContext>,ICategoryRepository
 {
     private readonly AppDbContext _context;
     private readonly DbSet<Category> _dbSet;

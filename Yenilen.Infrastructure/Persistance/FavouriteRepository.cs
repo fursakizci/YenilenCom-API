@@ -6,7 +6,7 @@ using Yenilen.Infrastructure.DataAccess;
 
 namespace Yenilen.Infrastructure.Persistance;
 
-public class FavouriteRepository : GenericRepository<Favourite>, IFavouriteRepository
+internal sealed class FavouriteRepository : GenericRepository<Favourite,AppDbContext>, IFavouriteRepository
 {
     public FavouriteRepository(AppDbContext context) : base(context)
     {

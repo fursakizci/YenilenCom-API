@@ -5,7 +5,7 @@ using Yenilen.Infrastructure.DataAccess;
 
 namespace Yenilen.Infrastructure.Persistance;
 
-public class StaffRepository:GenericRepository<Staff>,IStaffRepository
+internal sealed class StaffRepository:GenericRepository<Staff, AppDbContext>,IStaffRepository
 {
     private readonly AppDbContext _context;
     private readonly DbSet<Staff> _dbSet;
