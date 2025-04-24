@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+using Yenilen.Application.Interfaces;
 using Yenilen.Domain.Entities;
 
 namespace Yenilen.Infrastructure.DataAccess;
 
-public class AppDbContext:DbContext
+internal sealed class AppDbContext:DbContext, IUnitOfWork
 {
     public AppDbContext(DbContextOptions<AppDbContext> options):base(options)
     {

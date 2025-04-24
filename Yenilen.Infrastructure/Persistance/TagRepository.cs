@@ -4,7 +4,7 @@ using Yenilen.Infrastructure.DataAccess;
 
 namespace Yenilen.Infrastructure.Persistance;
 
-public class TagRepository:GenericRepository<Tag>,ITagRepository
+internal sealed class TagRepository:GenericRepository<Tag, AppDbContext>,ITagRepository
 {
     public TagRepository(AppDbContext context) : base(context)
     {

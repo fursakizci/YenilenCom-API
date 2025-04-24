@@ -12,11 +12,13 @@ internal class CreateUserHandler:IRequestHandler<CreateUserCommand, int>
 
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public CreateUserHandler(IUserRepository userRepository, IMapper mapper)
+    public CreateUserHandler(IUnitOfWork unitOfWork,IUserRepository userRepository, IMapper mapper)
     {
         _userRepository = userRepository;
         _mapper = mapper;
+        _unitOfWork = unitOfWork;
     }
     
     public async Task<int> Handle(CreateUserCommand request, CancellationToken cancellationToken)
@@ -29,6 +31,9 @@ internal class CreateUserHandler:IRequestHandler<CreateUserCommand, int>
         var user = _mapper.Map<Domain.Entities.User>(request);
 
         await _userRepository.AddAsync(user);
+
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        
         return user.Id;
     }
 }

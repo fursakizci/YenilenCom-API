@@ -5,7 +5,7 @@ using Yenilen.Infrastructure.DataAccess;
 
 namespace Yenilen.Infrastructure.Persistance;
 
-public class UserRepository : GenericRepository<User>, IUserRepository
+internal sealed class UserRepository : GenericRepository<User, AppDbContext>, IUserRepository
 {
     private readonly AppDbContext _context;
     private readonly DbSet<User> _dbSet;
