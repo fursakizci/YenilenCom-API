@@ -4,6 +4,8 @@ namespace Yenilen.Domain.Entities;
 
 public class Address:BaseEntity
 {
+    public int? UserId { get; set; }
+    public User? User { get; set; }
     public string? Label { get; set; }
     public string? FullAddress { get; set; }
     public string? District { get; set; }
@@ -16,7 +18,4 @@ public class Address:BaseEntity
     public double Longitude { get; set; }
     public double Latitude { get; set; }
     
-
-    public int? UserId { get; set; }
-    public int? StoreId { get; set; }
 }

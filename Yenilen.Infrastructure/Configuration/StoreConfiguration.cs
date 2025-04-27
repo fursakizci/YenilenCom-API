@@ -10,9 +10,16 @@ internal sealed class StoreConfiguration : IEntityTypeConfiguration<Store>
     {
         builder.ToTable("Stores");
 
-        builder.Property(s => s.Name)
+        builder.Property(s => s.StoreName)
             .IsRequired()
-            .HasMaxLength(200);
+            .HasMaxLength(100);
+        
+        builder.Property(s => s.ManagerName)
+            .IsRequired()
+            .HasMaxLength(100);
+        
+        builder.Property(s => s.ManagerPhone)
+            .HasMaxLength(20);
 
         builder.Property(s => s.MobileNumber)
             .HasMaxLength(20);
@@ -22,14 +29,11 @@ internal sealed class StoreConfiguration : IEntityTypeConfiguration<Store>
 
         builder.Property(s => s.About)
             .HasMaxLength(1000);
-
-        builder.HasOne(s => s.Favourite)
-            .WithMany()
-            .HasForeignKey(s => s.FavouriteId);
         
         builder.HasOne(s => s.Address)
             .WithOne()
-            .HasForeignKey<Store>(s => s.AddressId);
+            .HasForeignKey<Store>(s => s.AddressId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(s => s.Categories)
             .WithOne(c => c.Store)
