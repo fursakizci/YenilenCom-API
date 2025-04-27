@@ -36,7 +36,7 @@ public class GetAllFavouritesByUserIdHandler:IRequestHandler<GetAllFavouritesByU
             result.Add(new FavouriteDto
             {
                 Id = favorite.StoreId.ToString(),
-                Name = favorite.Store.Name,
+                Name = favorite.Store.StoreName,
                 Rating = storeRating,
                 ReviewCount = reviewCount,
                 FullAddress = storeAddress

@@ -2,7 +2,7 @@ namespace Yenilen.Application.DTOs;
 
 public class AddressDto
 {
-    public string Id { get; set; }
+    public int Id { get; set; }
     public string Label { get; set; }
     public string FullAddress { get; set; }
     public string District { get; set; }

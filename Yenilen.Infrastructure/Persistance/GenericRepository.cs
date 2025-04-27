@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Yenilen.Application.Interfaces;
 using Yenilen.Infrastructure.DataAccess;
@@ -54,5 +55,15 @@ public class GenericRepository<TEntity, TContext>:IGenericRepository<TEntity>
         }
         
         _dbSet.Remove(item);
+    }
+
+    public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet.AnyAsync(expression, cancellationToken);
+    }
+    
+    public IQueryable<TEntity> Where(Expression<Func<TEntity, bool>> expression)
+    {
+        return _dbSet.AsNoTracking().Where(expression).AsQueryable();
     }
 }

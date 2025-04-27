@@ -5,15 +5,17 @@ using Yenilen.Application.Interfaces;
 
 namespace Yenilen.Application.Features.User.Handlers;
 
-public class AddUserAddressHandler : IRequestHandler<AddUserAddressCommand, int>
+internal sealed class AddUserAddressHandler : IRequestHandler<AddUserAddressCommand, int>
 {
 
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IUserRepository _userRepository;
     private readonly IAddressRepository _addressRepository;
     private readonly IMapper _mapper;
 
-    public AddUserAddressHandler(IUserRepository userRepository,IAddressRepository addressRepository, IMapper mapper)
+    public AddUserAddressHandler(IUnitOfWork unitOfWork, IUserRepository userRepository,IAddressRepository addressRepository, IMapper mapper)
     {
+        _unitOfWork = unitOfWork;
         _userRepository = userRepository;
         _addressRepository = addressRepository;
         _mapper = mapper;
@@ -27,11 +29,14 @@ public class AddUserAddressHandler : IRequestHandler<AddUserAddressCommand, int>
 
         var newAddress = _mapper.Map<Domain.Entities.Address>(request);
 
-        newAddress.UserId = user.Id;
-
+        //newAddress.UserId = user.Id;
+        // newAddress.Store = null;
+        // newAddress.StoreId = null;
         await _addressRepository.AddAsync(newAddress);
         
         user.Addresses.Add(newAddress);
+        
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return newAddress.Id;
     }

@@ -61,7 +61,8 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
         // });
         
         builder.HasMany(u => u.Addresses)
-            .WithOne()
-            .HasForeignKey("UserId");
+            .WithOne(a => a.User)
+            .HasForeignKey(a => a.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

@@ -12,8 +12,8 @@ using Yenilen.Infrastructure.DataAccess;
 namespace Yenilen.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250423061752_mig_2")]
-    partial class mig_2
+    [Migration("20250427062447_mig_1")]
+    partial class mig_1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -120,9 +120,6 @@ namespace Yenilen.Infrastructure.Migrations
                     b.Property<string>("Region")
                         .HasColumnType("text");
 
-                    b.Property<int?>("StoreId")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -136,7 +133,7 @@ namespace Yenilen.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("Yenilen.Domain.Entities.Appointment", b =>
@@ -365,7 +362,7 @@ namespace Yenilen.Infrastructure.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
-                    b.Property<int>("StaffId")
+                    b.Property<int?>("StaffId")
                         .HasColumnType("integer");
 
                     b.Property<int>("StoreId")
@@ -572,27 +569,34 @@ namespace Yenilen.Infrastructure.Migrations
                     b.Property<DateTime?>("DeleteAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("FavouriteId")
-                        .HasColumnType("integer");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("ManagerName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("ManagerPhone")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
                     b.Property<string>("MobileNumber")
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
                     b.Property<string>("PhoneNumber")
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
+
+                    b.Property<string>("StoreName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -604,8 +608,6 @@ namespace Yenilen.Infrastructure.Migrations
 
                     b.HasIndex("AddressId")
                         .IsUnique();
-
-                    b.HasIndex("FavouriteId");
 
                     b.ToTable("Stores", (string)null);
                 });
@@ -671,6 +673,10 @@ namespace Yenilen.Infrastructure.Migrations
 
                     b.Property<DateTime?>("DeleteAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -805,9 +811,12 @@ namespace Yenilen.Infrastructure.Migrations
 
             modelBuilder.Entity("Yenilen.Domain.Entities.Address", b =>
                 {
-                    b.HasOne("Yenilen.Domain.Entities.User", null)
+                    b.HasOne("Yenilen.Domain.Entities.User", "User")
                         .WithMany("Addresses")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Yenilen.Domain.Entities.Appointment", b =>
@@ -888,8 +897,7 @@ namespace Yenilen.Infrastructure.Migrations
                     b.HasOne("Yenilen.Domain.Entities.Staff", "Staff")
                         .WithMany()
                         .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Yenilen.Domain.Entities.Store", "Store")
                         .WithMany()
@@ -948,18 +956,10 @@ namespace Yenilen.Infrastructure.Migrations
                     b.HasOne("Yenilen.Domain.Entities.Address", "Address")
                         .WithOne()
                         .HasForeignKey("Yenilen.Domain.Entities.Store", "AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Yenilen.Domain.Entities.Favourite", "Favourite")
-                        .WithMany()
-                        .HasForeignKey("FavouriteId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Address");
-
-                    b.Navigation("Favourite");
                 });
 
             modelBuilder.Entity("Yenilen.Domain.Entities.StoreWorkingHour", b =>
