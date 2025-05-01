@@ -1,6 +1,6 @@
 using AutoMapper;
 using MediatR;
-using Yenilen.Application.Features.Users.Commands;
+using Yenilen.Application.Features.User.Commands;
 using Yenilen.Application.Interfaces;
 
 namespace Yenilen.Application.Features.User.Handlers;

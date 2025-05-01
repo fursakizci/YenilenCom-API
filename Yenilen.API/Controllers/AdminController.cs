@@ -1,5 +1,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Yenilen.Application.Features.Category.Commands;
+using Yenilen.Application.Features.Service.Commands;
+using Yenilen.Application.Features.StaffMember.Commands;
 using Yenilen.Application.Features.Store.Commands;
 
 namespace Yenilen.API.Controllers;
@@ -15,7 +18,7 @@ public class AdminController:ControllerBase
         _mediator = mediator;
     }
     
-    [HttpPost("create")]
+    [HttpPost("store")]
     public async Task<IActionResult> CreateStore([FromBody] CreateStoreCommand command)
     {
         var storeId = await _mediator.Send(command);
@@ -23,14 +26,29 @@ public class AdminController:ControllerBase
     }
 
     [HttpPost("create-staff")]
-    public async Task<IActionResult> CreateStaff()
+    public async Task<IActionResult> CreateStaff([FromBody] CreateStaffMemberCommand command)
     {
-        return Ok();
+        var staffId = await _mediator.Send(command);
+        return Ok(new{ Id = staffId });
     }
 
     [HttpPut("update/{id}")]
     public async Task<IActionResult> UpdateStore()
     {
         return Ok();
+    }
+
+    [HttpPost("category")]
+    public async Task<IActionResult> CreateCategoryByStoreId([FromBody] CreateCategoryCommand command)
+    {
+        var categoryId = await _mediator.Send(command);
+        return Ok(new { Id = categoryId });
+    }
+
+    [HttpPost("service")]
+    public async Task<IActionResult> CreateServiceByCategoryId([FromBody] CreateServiceCommand command)
+    {
+        var serviceId = await _mediator.Send(command);
+        return Ok(new { Id = serviceId });
     }
 }

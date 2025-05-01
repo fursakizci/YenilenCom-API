@@ -20,7 +20,7 @@ public class GetAllTagsHandler:IRequestHandler<GetAllTagsQuery,List<TagDto>>
     public async Task<List<TagDto>> Handle(GetAllTagsQuery request, CancellationToken cancellationToken)
     {
 
-        var tags = await _tagRepository.GetAllAsync();
+        var tags = _tagRepository.GetAll();
 
         var tagDtos = _mapper.Map<List<TagDto>>(tags);
 

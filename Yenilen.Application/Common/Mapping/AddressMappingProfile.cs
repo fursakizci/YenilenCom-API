@@ -1,6 +1,5 @@
 using AutoMapper;
-using Yenilen.Application.DTOs;
-using Yenilen.Application.Features.Users.Commands;
+using Yenilen.Application.Features.User.Commands;
 using Yenilen.Domain.Entities;
 
 namespace Yenilen.Application.Common.Mapping;

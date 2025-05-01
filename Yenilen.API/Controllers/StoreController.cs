@@ -1,6 +1,9 @@
 using MediatR;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Yenilen.Application.Features.Category.Queries;
+using Yenilen.Application.Features.Service.Queries;
+using Yenilen.Application.Features.StaffMember.Queries;
+
 
 namespace Yenilen.API.Controllers;
 
@@ -21,9 +24,24 @@ public class StoreController: ControllerBase
         return Ok();
     }
 
-    [HttpGet("Stores")]
-    public async Task<IActionResult> GetStoresByDistance()
+    [HttpGet("staff-members")]
+    public async Task<IActionResult> GetStaffMembers([FromQuery] GetStaffMembersByStoryIdQuery query)
     {
-        return Ok();
+        var result = await _mediator.Send(query);
+        return Ok(result);
+    }
+
+    [HttpGet("categories")]
+    public async Task<IActionResult> GetCategoriesByStoreId([FromQuery] GetCategoriesByStoreIdQuery query)
+    {
+        var result = await _mediator.Send(query);
+        return Ok(result);
+    }
+
+    [HttpGet("services")]
+    public async Task<IActionResult> GetServicesByCategoryId([FromQuery] GetServicesByCategoryIdQuery query)
+    {
+        var result = await _mediator.Send(query);
+        return Ok(result);
     }
 }

@@ -7,6 +7,9 @@ public class Staff:BaseEntity
     public int StoreId { get; set; }
     public Store Store { get; set; }
     public string Name { get; set; }
+    
+    public string? PhoneNumber { get; set; }
+    public string? Email { get; set; }
     public bool IsAvailable { get; set; } = true;
     public string? Bio { get; set; }
     

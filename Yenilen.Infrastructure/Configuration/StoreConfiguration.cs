@@ -39,9 +39,9 @@ internal sealed class StoreConfiguration : IEntityTypeConfiguration<Store>
             .WithOne(c => c.Store)
             .HasForeignKey(c => c.StoreId);
 
-        // builder.HasMany(s => s.Services)
-        //     .WithOne()
-        //     .HasForeignKey("StoreId");
+        builder.HasMany(s => s.Reviews)
+            .WithOne(r => r.Store)
+            .HasForeignKey(r => r.StoreId);
 
         builder.HasMany(s => s.StaffMembers)
             .WithOne(s => s.Store)

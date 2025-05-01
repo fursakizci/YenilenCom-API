@@ -1,8 +1,7 @@
 using MediatR;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Yenilen.Application.Features.Store.Queries;
 using Yenilen.Application.Features.Tag.Commands;
-using Yenilen.Application.Features.Tag.Handler;
 using Yenilen.Application.Features.Tag.Queries;
 
 namespace Yenilen.API.Controllers;
@@ -18,10 +17,17 @@ public class SearchController:ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet]
+    [HttpGet("tags")]
     public async Task<IActionResult> GetAllTags()
     {
         var result = await _mediator.Send(new GetAllTagsQuery());
+        return Ok(result);
+    }
+
+    [HttpGet("store-by-distance")]
+    public async Task<IActionResult> GetStoresByDistance([FromQuery] GetStoresByDistanceQuery query)
+    {
+        var result = await _mediator.Send(query);
         return Ok(result);
     }
 

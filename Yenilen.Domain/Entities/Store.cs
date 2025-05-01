@@ -14,7 +14,7 @@ public class Store:BaseEntity
     public string? About { get; set; }
     
     public ICollection<Category> Categories { get; set; } = new List<Category>();
-    //public ICollection<Service> Services { get; set; } = new List<Service>();
+    public ICollection<Review> Reviews { get; set; } = new List<Review>();
     public ICollection<Staff> StaffMembers { get; set; } = new List<Staff>();
     public ICollection<StoreWorkingHour> WorkingHours { get; set; } = new List<StoreWorkingHour>();
     public ICollection<Image> Images { get; set; } = new List<Image>();
