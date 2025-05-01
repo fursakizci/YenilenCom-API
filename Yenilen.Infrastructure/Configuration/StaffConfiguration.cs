@@ -11,6 +11,15 @@ internal sealed class StaffConfiguration : IEntityTypeConfiguration<Staff>
         builder.Property(s => s.Name)
             .IsRequired()
             .HasMaxLength(100);
+        
+        builder.Property(u => u.Email)
+            .HasMaxLength(150);
+
+        builder.HasIndex(u => u.Email)
+            .IsUnique();
+
+        builder.Property(u => u.PhoneNumber)
+            .HasMaxLength(20);
 
         builder.Property(s => s.IsAvailable)
             .IsRequired();

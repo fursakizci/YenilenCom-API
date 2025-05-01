@@ -2,7 +2,7 @@ namespace Yenilen.Application.DTOs;
 
 public class ServiceDto
 {
-    public string CatalogId { get; set; }
+    public string CategoryId { get; set; }
     public int ServiceId { get; set; }
     public string Name { get; set; }
     public decimal Price { get; set; }

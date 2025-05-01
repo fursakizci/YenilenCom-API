@@ -5,7 +5,7 @@ using Yenilen.Application.Interfaces;
 
 namespace Yenilen.Application.Features.User.Handlers;
 
-public class GetByIdUserHandler: IRequestHandler<GetByIdUserQuery,UserDto>
+internal sealed class GetByIdUserHandler: IRequestHandler<GetByIdUserQuery,UserDto>
 {
     private readonly IUserRepository _userRepository;
 

@@ -2,10 +2,12 @@ namespace Yenilen.Application.DTOs;
 
 public class StoreDto
 {
+    public int StoreId { get; set; }
     public string? Name { get; set; }
-    public string? WebsiteUrl { get; set; }
-    public List<int>? TagIds { get; set; }
-    public string? CountOfWorkers { get; set; }
-    public string? OwnerName { get; set; }
-    public ICollection<StoreWorkingHourDto>? StoreWorkingHours { get; set; }
+    public double? Rating  { get; set; }
+    public int CountOfReview { get; set; }
+    public List<string>? ImageUrl { get; set; }
+    public double Distance { get; set; }
+    public AddressDto Address { get; set; }
+    public List<ServiceDto> Services { get; set; }
 }

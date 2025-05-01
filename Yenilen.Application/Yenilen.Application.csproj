@@ -15,16 +15,7 @@
 
     <ItemGroup>
       <Folder Include="Auth\" />
-      <Folder Include="Features\Booking\Commands\" />
-      <Folder Include="Features\Catalog\Commands\" />
-      <Folder Include="Features\Catalog\Handlers\" />
-      <Folder Include="Features\Catalog\Queries\" />
       <Folder Include="Features\Profile\Commands\" />
-      <Folder Include="Features\Service\Commands\" />
-      <Folder Include="Features\Service\Handlers\" />
-      <Folder Include="Features\Service\Queries\" />
-      <Folder Include="Features\StoreList\" />
-      <Folder Include="Features\Store\Queries\" />
     </ItemGroup>
 
     <ItemGroup>

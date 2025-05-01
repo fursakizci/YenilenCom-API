@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Yenilen.Application.Features.Profile.Queries;
 using Yenilen.Application.Features.User.Queries;
+using Yenilen.Application.Features.User.Commands;
 using Yenilen.Application.Features.Users.Commands;
 
 namespace Yenilen.API.Controllers;
@@ -65,5 +66,12 @@ public class UserController:ControllerBase
     public async Task<IActionResult> UserGetAddresses()
     {
         return Ok();
+    }
+
+    [HttpPost("favourite")]
+    public async Task<IActionResult> AddFavouriteStore([FromBody] AddFavouriteStoreCommand command)
+    {
+        var favouriteId = await _mediator.Send(command);
+        return Ok(new{ Id = favouriteId });
     }
 }

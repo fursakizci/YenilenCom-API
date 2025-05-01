@@ -1,9 +1,9 @@
 using FluentValidation;
 using MediatR;
 
-namespace Yenilen.Application.Features.Users.Commands;
+namespace Yenilen.Application.Features.User.Commands;
 
-public class AddUserAddressCommand:IRequest<int>
+public sealed class AddUserAddressCommand:IRequest<int>
 {
     public int UserId { get; set; }
     public string Label { get; set; }

@@ -1,10 +1,10 @@
 using AutoMapper;
 using MediatR;
 using Yenilen.Application.DTOs;
-using Yenilen.Application.Features.Booking.Queries;
+using Yenilen.Application.Features.Service.Queries;
 using Yenilen.Application.Interfaces;
 
-namespace Yenilen.Application.Features.Booking.Handlers;
+namespace Yenilen.Application.Features.Service.Handlers;
 
 public class GetServicesByCategoryIdHandler:IRequestHandler<GetServicesByCategoryIdQuery,List<ServiceDto>>
 {
