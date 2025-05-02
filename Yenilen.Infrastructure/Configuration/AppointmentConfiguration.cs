@@ -23,9 +23,6 @@ internal sealed class AppointmentConfiguration : IEntityTypeConfiguration<Appoin
         builder.HasMany(a => a.Services)
             .WithMany();
 
-        builder.HasMany(a => a.Categories)
-            .WithMany();
-
         builder.Property(a => a.StartTime)
             .IsRequired();
 

@@ -21,4 +21,9 @@ internal sealed class StaffRepository:GenericRepository<Staff, AppDbContext>,ISt
             .Include(i=>i.Image)
             .ToListAsync();
     }
+
+    public Task<IQueryable<Staff>> GetAppointmentsByStaffAndDateAsync(int id, DateTime date)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -19,4 +19,5 @@ public class Store:BaseEntity
     public ICollection<StoreWorkingHour> WorkingHours { get; set; } = new List<StoreWorkingHour>();
     public ICollection<Image> Images { get; set; } = new List<Image>();
     public ICollection<Tag> Tags { get; set; } = new List<Tag>();
+    public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 }

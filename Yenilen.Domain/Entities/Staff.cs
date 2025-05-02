@@ -15,6 +15,6 @@ public class Staff:BaseEntity
     
     public int ImageId { get; set; }
     public Image? Image { get; set; }
-   
     public ICollection<StaffWorkingHour> WorkingHours { get; set; } = new List<StaffWorkingHour>();
+    public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 }

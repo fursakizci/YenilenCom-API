@@ -4,5 +4,4 @@ namespace Yenilen.Application.Interfaces;
 
 public interface IAppointmentRepository:IGenericRepository<Appointment>
 {
-    
 }

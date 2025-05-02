@@ -15,4 +15,6 @@ public class User:BaseEntity
     public ICollection<Address> Addresses { get; set; } = new List<Address>();
     public ICollection<Favourite> Favourites { get; set; } = new List<Favourite>();
     
+    public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
+    
 }
