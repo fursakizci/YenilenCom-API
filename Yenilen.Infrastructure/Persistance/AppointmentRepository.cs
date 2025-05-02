@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Yenilen.Application.Interfaces;
 using Yenilen.Domain.Entities;
 using Yenilen.Infrastructure.DataAccess;

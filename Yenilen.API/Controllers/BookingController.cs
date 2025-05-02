@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Yenilen.Application.Features.Booking.Queries;
 
 namespace Yenilen.API.Controllers;
 
@@ -33,8 +34,9 @@ public class BookingController:ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllAppointment()
+    public async Task<IActionResult> GetAllAppointment([FromQuery] GetAvailableSlutsForStaffQuery query)
     {
-        return Ok();
+        var result = await _mediator.Send(query);
+        return Ok(result);
     }
 }

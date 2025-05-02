@@ -64,5 +64,10 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
             .WithOne(a => a.User)
             .HasForeignKey(a => a.UserId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasMany(u => u.Appointments)
+            .WithOne(a => a.User)
+            .HasForeignKey(a => a.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

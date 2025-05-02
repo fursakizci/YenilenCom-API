@@ -40,5 +40,9 @@ internal sealed class StaffConfiguration : IEntityTypeConfiguration<Staff>
         builder.HasMany(s => s.WorkingHours)
             .WithOne()
             .HasForeignKey("StaffId");
+
+        builder.HasMany(s => s.Appointments)
+            .WithOne(a => a.Staff)
+            .HasForeignKey(a => a.StaffId);
     }
 }

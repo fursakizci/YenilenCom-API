@@ -56,5 +56,10 @@ internal sealed class StoreConfiguration : IEntityTypeConfiguration<Store>
             .HasForeignKey(i => i.StoreId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        builder.HasMany(s => s.Appointments)
+            .WithOne(a => a.Store)
+            .HasForeignKey(a => a.StoreId)
+            .OnDelete(DeleteBehavior.Restrict);
+
     }
 }
