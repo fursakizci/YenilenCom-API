@@ -23,13 +23,14 @@ public class GetProfileByIdHandler : IRequestHandler<GetProfileByIdQuery, Profil
         var profileDto = new ProfileDto
         {
             Id = user.Id.ToString(),
-            Name = user.FirstName,
-            Surname = user.LastName,
-            Phone = user.PhoneNumber,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Initials = $"{char.ToUpper(user.FirstName?.FirstOrDefault() ?? ' ')}{char.ToUpper(user.LastName?.FirstOrDefault() ?? ' ')}",
+            MobileNumber = user.PhoneNumber,
             Email = user.Email,
             DateOfBirth = user.DateOfBirth.ToString("dd/MM/yyyy"),
-            Sex = user.Gender.ToString(),
-            Address = user.Addresses != null
+            Gender = user.Gender.ToString(),
+            Addresses = user.Addresses != null
                 ? user.Addresses.Select(a => new AddressDto
                 {
                     Id = a.Id,
