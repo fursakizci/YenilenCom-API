@@ -41,24 +41,6 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasMany(u => u.Favourites)
             .WithOne(f => f.User)
             .HasForeignKey(f => f.UserId);
-
-        // builder.OwnsMany(u => u.Addresses, address =>
-        // {
-        //     address.WithOwner().HasForeignKey("UserId");
-        //
-        //     address.Property(a => a.Label).HasMaxLength(100);
-        //     address.Property(a => a.FullAddress).HasColumnName("FullAddress").HasMaxLength(300);
-        //     address.Property(a => a.District).HasMaxLength(100);
-        //     address.Property(a => a.City).HasMaxLength(100);
-        //     address.Property(a => a.Region).HasMaxLength(100);
-        //     address.Property(a => a.Country).HasMaxLength(100);
-        //     address.Property(a => a.CountryCode).HasMaxLength(10);
-        //     address.Property(a => a.PostCode).HasMaxLength(20);
-        //     address.Property(a => a.Latitude);
-        //     address.Property(a => a.Longitude);
-        //
-        //     address.ToTable("UserAddresses");
-        // });
         
         builder.HasMany(u => u.Addresses)
             .WithOne(a => a.User)

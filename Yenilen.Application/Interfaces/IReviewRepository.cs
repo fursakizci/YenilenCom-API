@@ -7,4 +7,5 @@ public interface IReviewRepository:IGenericRepository<Review>
     Task<int> GetReviewCountByStoreId(int id);
     Task<decimal> GetStoreRatingByStoreId(int id);
 
+    
 }

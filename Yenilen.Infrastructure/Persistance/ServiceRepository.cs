@@ -24,4 +24,17 @@ internal sealed class ServiceRepository:GenericRepository<Service, AppDbContext>
         
         return services;
     }
+
+    public async Task<bool> AllServicesExistAsync(List<int> serviceIds, CancellationToken cancellationToken = default)
+    {
+        var existingCount = await _dbSet.Where(s => serviceIds.Contains(s.Id)).CountAsync(cancellationToken);
+
+        return existingCount == serviceIds.Count;
+    }
+
+    public async Task<IEnumerable<Service>> GetByIdsAsync(List<int> serviceIds, CancellationToken cancellationToken)
+    {
+        var services = await _dbSet.Where(s => serviceIds.Contains(s.Id)).ToListAsync(cancellationToken);
+        return services;
+    }
 }

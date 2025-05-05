@@ -34,7 +34,7 @@ internal sealed class GetStoresByDistanceHandler:IRequestHandler<GetStoresByDist
                 Name = s.StoreName,
                 Rating = 4,
                 //CountOfReview = s.Reviews.Count(),
-                ImageUrl = s.Images.Select(img => img.ImageUrl).ToList(),
+                ImageUrls = s.Images.Select(img => img.ImageUrl).ToList(),
                 Address = new AddressDto
                 {
                     FullAddress = s.Address.FullAddress,

@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Yenilen.Application.Features.Booking.Commands;
 using Yenilen.Application.Features.Booking.Queries;
 
 namespace Yenilen.API.Controllers;
@@ -21,19 +22,14 @@ public class BookingController:ControllerBase
         return Ok();
     }
     
-    [HttpGet("times")]
-    public async Task<IActionResult> GetAvailableTimes()
-    {
-        return Ok();
-    }
-    
     [HttpPost("create")]
-    public async Task<IActionResult> CreateOppointment()
+    public async Task<IActionResult> CreateOppointment([FromBody] CreateAppointmentCommand command)
     {
-        return Ok(new { Id = 0 });
+        var appointmentId = await _mediator.Send(command);
+        return Ok(new { Id = appointmentId });
     }
 
-    [HttpGet]
+    [HttpGet("availabilities")]
     public async Task<IActionResult> GetAllAppointment([FromQuery] GetAvailableSlutsForStaffQuery query)
     {
         var result = await _mediator.Send(query);

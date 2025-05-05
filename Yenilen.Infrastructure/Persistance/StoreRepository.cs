@@ -27,4 +27,18 @@ internal sealed class StoreRepository:GenericRepository<Store, AppDbContext>,ISt
 
         return store.Address.FullAddress;
     }
+
+    public async Task<Store> GetStoreWithDetailsAsync(int id)
+    {
+        var store = await _dbSet.Where(s => s.Id == id)
+            .Include(s => s.Address)
+            .Include(s => s.Reviews)
+            .Include(s => s.Categories)
+            .ThenInclude(c => c.Services)
+            .Include(s => s.Images)
+            .Include(s => s.WorkingHours)
+            .FirstOrDefaultAsync();
+
+        return store ;
+    }
 }
