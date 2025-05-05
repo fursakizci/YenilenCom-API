@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Yenilen.Application.Features.Booking.Queries;
 using Yenilen.Application.Features.Profile.Queries;
 using Yenilen.Application.Features.User.Queries;
 using Yenilen.Application.Features.User.Commands;
@@ -42,10 +43,11 @@ public class UserController:ControllerBase
         return Ok(user);
     }
     
-    [HttpGet("appointments/{id}")]
-    public async Task<IActionResult> GetAppointmentsByUserId(int id)
+    [HttpGet("appointments")]
+    public async Task<IActionResult> GetAppointmentsByUserId([FromQuery] GetUserAppointmentsByUserIdQuery query)
     {
-        return Ok();
+        var appointments = await _mediator.Send(query);
+        return Ok(appointments);
     }
 
     [HttpPost("create")]

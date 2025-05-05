@@ -25,7 +25,7 @@ public class AdminController:ControllerBase
         return Ok(new { Id = storeId });
     }
 
-    [HttpPost("create-staff")]
+    [HttpPost("staff/create")]
     public async Task<IActionResult> CreateStaff([FromBody] CreateStaffMemberCommand command)
     {
         var staffId = await _mediator.Send(command);
@@ -50,5 +50,11 @@ public class AdminController:ControllerBase
     {
         var serviceId = await _mediator.Send(command);
         return Ok(new { Id = serviceId });
+    }
+
+    [HttpGet("staff/appointments")]
+    public async Task<IActionResult> GetStaffAppointments()
+    {
+        return Ok();
     }
 }

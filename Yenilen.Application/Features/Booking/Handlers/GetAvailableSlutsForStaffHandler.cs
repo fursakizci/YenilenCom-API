@@ -30,7 +30,7 @@ internal sealed class GetAvailableSlutsForStaffHandler:IRequestHandler<GetAvaila
         var today = DateTime.UtcNow.Date;
         var result = new List<AvailableDateDto>();
 
-        var staffWorkingHours = _staffWorkingHourRepository.Where(s=>s.StaffId == staff.Id).ToList();
+        var staffWorkingHours = await _staffWorkingHourRepository.GetStaffWorkingHoursByStaffId(staff.Id);
 
         for (int i = 0; i < 14; i++)
         {
@@ -39,10 +39,10 @@ internal sealed class GetAvailableSlutsForStaffHandler:IRequestHandler<GetAvaila
             
             if(workingHour == null) continue;
 
-            var appointments =
-                 _appointmentRepository.Where(a => a.StaffId == request.StaffId && a.StartTime.Date == date.Date);
+            var appointments = await 
+                _appointmentRepository.GetAppointmentsByStaffAndDateAsync(request.StaffId, date.Date);
 
-            var appointmentSlots = appointments
+            var appointmentSlots =  appointments
                 .Select(a => new 
                 { 
                     Start = a.StartTime.TimeOfDay, 
@@ -52,7 +52,7 @@ internal sealed class GetAvailableSlutsForStaffHandler:IRequestHandler<GetAvaila
 
             var timeSlots = new List<TimeSlotDto>();
             var slotStart = workingHour.StartTime;
-            var slotEnd = slotStart.Add(TimeSpan.FromMinutes(15));
+            var slotEnd = slotStart.Add(TimeSpan.FromMinutes(request.TotalServiceDuration));
 
             while (slotEnd <= workingHour.EndTime)
             {
@@ -64,12 +64,13 @@ internal sealed class GetAvailableSlutsForStaffHandler:IRequestHandler<GetAvaila
                     timeSlots.Add(new TimeSlotDto()
                     {
                         StartTimeInSeconds = (int)slotStart.TotalSeconds,
-                        FormattedTime = date.Date.Add(slotStart).ToString("h:mm tt")
+                        FormattedTime = date.Date.Add(slotStart).ToString("h:mm tt"),
+                        Duration = request.TotalServiceDuration
                     });
                 }
 
                 slotStart = slotStart.Add(TimeSpan.FromMinutes(15));
-                slotEnd = slotStart.Add(TimeSpan.FromMinutes(15));
+                slotEnd = slotStart.Add(TimeSpan.FromMinutes(request.TotalServiceDuration));
             }
 
             if (timeSlots.Any())

@@ -24,17 +24,25 @@ public class SearchController:ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("store-by-distance")]
+    [HttpGet("search-mapbox")]
     public async Task<IActionResult> GetStoresByDistance([FromQuery] GetStoresByDistanceQuery query)
     {
         var result = await _mediator.Send(query);
         return Ok(result);
     }
 
-    [HttpPost("create")]
+    [HttpPost("create-tag")]
     public async Task<IActionResult> CreateTag([FromBody] CreateTagCommand command)
     {
         var tagId = await _mediator.Send(command);
         return Ok(new {Id = tagId});
     }
+
+    [HttpGet("searchBar")]
+    public async Task<IActionResult> GetStoresFromSearchBar([FromQuery] GetStoresFromSearchBarQuery query)
+    {
+        var result = await _mediator.Send(query);
+        return Ok(result);
+    }
+    
 }

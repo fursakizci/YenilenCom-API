@@ -16,9 +16,5 @@ internal sealed class FavouriteConfiguration: IEntityTypeConfiguration<Favourite
             .WithOne()
             .HasForeignKey<Favourite>(f => f.StoreId);
 
-
-        // builder.HasOne(f => f.Store)
-        //     .WithMany(f => f.)
-        //     .HasForeignKey(f => f.StoreId);
     }
 }

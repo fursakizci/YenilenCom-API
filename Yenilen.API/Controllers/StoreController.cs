@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Yenilen.Application.Features.Category.Queries;
 using Yenilen.Application.Features.Service.Queries;
 using Yenilen.Application.Features.StaffMember.Queries;
+using Yenilen.Application.Features.Store.Queries;
 
 
 namespace Yenilen.API.Controllers;
@@ -18,10 +19,11 @@ public class StoreController: ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet("store/{id}")]
-    public async Task<IActionResult> GetStoreById(int Id)
+    [HttpGet("dashboard")]
+    public async Task<IActionResult> GetStoreById([FromQuery] GetStoreByIdQuery query)
     {
-        return Ok();
+        var result = await _mediator.Send(query);
+        return Ok(result);
     }
 
     [HttpGet("staff-members")]
