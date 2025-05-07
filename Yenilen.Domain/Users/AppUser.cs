@@ -1,17 +1,19 @@
-namespace Yenilen.Domain.Common;
+using Microsoft.AspNetCore.Identity;
 
-public class BaseEntity
+namespace Yenilen.Domain.Users;
+
+public sealed class AppUser : IdentityUser<Guid>
 {
-    public BaseEntity()
-    {
-        Uuid = Guid.NewGuid();
-        CreatedAt = DateTime.UtcNow;
-        IsActive = true;
-        IsDeleted = false;
-    }
-    public int Id { get; set; }
-    public Guid Uuid { get; set; }
 
+    public AppUser()
+    {
+        Id = Guid.NewGuid();
+    }
+
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string FullName => $"{FirstName} {LastName}";
+    
     #region Audit Log
 
     public Guid CreateUserId { get; set; } = default!;
@@ -25,5 +27,4 @@ public class BaseEntity
     public DateTime? DeleteAt { get; set; }
 
     #endregion
-   
 }

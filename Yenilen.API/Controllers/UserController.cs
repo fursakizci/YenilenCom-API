@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Yenilen.Application.Features.Booking.Queries;
 using Yenilen.Application.Features.Profile.Queries;
@@ -10,6 +11,7 @@ namespace Yenilen.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class UserController:ControllerBase
 {
     private readonly IMediator _mediator;

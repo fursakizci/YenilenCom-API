@@ -1,10 +1,13 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Yenilen.Application.Interfaces;
 using Yenilen.Domain.Entities;
+using Yenilen.Domain.Users;
 
 namespace Yenilen.Infrastructure.DataAccess;
 
-internal sealed class AppDbContext:DbContext, IUnitOfWork
+internal sealed class AppDbContext:IdentityDbContext<AppUser,IdentityRole<Guid>,Guid>, IUnitOfWork
 {
     public AppDbContext(DbContextOptions<AppDbContext> options):base(options)
     {
@@ -27,5 +30,6 @@ internal sealed class AppDbContext:DbContext, IUnitOfWork
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
         base.OnModelCreating(modelBuilder);
+
     }
 }

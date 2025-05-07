@@ -1,13 +1,9 @@
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.RateLimiting;
 using Yenilen.API.Middlewares;
-using Yenilen.API.Shared;
 using Yenilen.Application.Common.Mapping;
 using Yenilen.Infrastructure;
 using Yenilen.Application;
-using Yenilen.Domain.Entities;
-using Yenilen.Infrastructure.DataAccess;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +42,7 @@ builder.Services.AddRateLimiter(x =>
 
 //builder.Services.AddExceptionHandler<ExceptionHandler>().AddProblemDetails();
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -57,11 +54,17 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowFrontend");
 
+//Authentication ve authorization app ayarlari.
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseHttpsRedirection();
 
 app.UseGlobalExceptionHandling();
 
 app.MapControllers().RequireRateLimiting("fixed");
+
+ExtensionsMiddleware.CreateFirstUser(app);
 
 app.Run();
 
