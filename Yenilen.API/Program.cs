@@ -7,6 +7,11 @@ using Yenilen.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddResponseCompression(opt =>
+{
+    opt.EnableForHttps = true;
+}); // veriyi sikistirmak icin.
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend",
@@ -22,7 +27,43 @@ builder.Services.AddCors(options =>
 
 // Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+
+//builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new() { Title = "Yenilen.API", Version = "v1" });
+
+    // 🔐 JWT Bearer token konfigürasyonu
+    c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Description = "JWT Authorization header. Örn: Bearer {token}"
+    });
+
+    c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
+
+
+
 
 builder.Services.AddAutoMapper(typeof(UserMappingProfile)); // added AutoMapper service
 builder.Services.AddInfrastructure(builder.Configuration);
@@ -52,19 +93,22 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseHttpsRedirection(); // HTTPS ile iletilen verileri sifreler  UseResponseCompression dan once olmali
+
 app.UseCors("AllowFrontend");
 
 //Authentication ve authorization app ayarlari.
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseHttpsRedirection();
+app.UseResponseCompression(); // responselari sıkistiriyor.
 
 app.UseGlobalExceptionHandling();
 
 app.MapControllers().RequireRateLimiting("fixed");
 
-ExtensionsMiddleware.CreateFirstUser(app);
+//ExtensionsMiddleware.CreateFirstUser(app);
+
 
 app.Run();
 

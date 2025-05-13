@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Yenilen.Domain.Entities;
 using Yenilen.Domain.Users;
 
 namespace Yenilen.Infrastructure.Configuration;
@@ -28,6 +29,10 @@ internal sealed class AppUserConfiguration: IEntityTypeConfiguration<AppUser>
 
         builder.HasIndex(u => u.PhoneNumber)
             .IsUnique();
-        
+
+        builder.HasMany(u => u.RefreshTokens)
+            .WithOne(r => r.AppUser)
+            .HasForeignKey(r => r.AppUserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

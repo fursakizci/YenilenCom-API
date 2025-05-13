@@ -208,7 +208,7 @@ namespace Yenilen.Infrastructure.Migrations
                     b.Property<DateTime?>("DeleteAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("DeleteUserId")
+                    b.Property<Guid?>("DeleteUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("District")
@@ -274,7 +274,7 @@ namespace Yenilen.Infrastructure.Migrations
                     b.Property<DateTime?>("DeleteAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("DeleteUserId")
+                    b.Property<Guid?>("DeleteUserId")
                         .HasColumnType("uuid");
 
                     b.Property<TimeSpan>("Duration")
@@ -347,7 +347,7 @@ namespace Yenilen.Infrastructure.Migrations
                     b.Property<DateTime?>("DeleteAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("DeleteUserId")
+                    b.Property<Guid?>("DeleteUserId")
                         .HasColumnType("uuid");
 
                     b.Property<bool>("IsActive")
@@ -397,7 +397,7 @@ namespace Yenilen.Infrastructure.Migrations
                     b.Property<DateTime?>("DeleteAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("DeleteUserId")
+                    b.Property<Guid?>("DeleteUserId")
                         .HasColumnType("uuid");
 
                     b.Property<bool>("IsActive")
@@ -448,7 +448,7 @@ namespace Yenilen.Infrastructure.Migrations
                     b.Property<DateTime?>("DeleteAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("DeleteUserId")
+                    b.Property<Guid?>("DeleteUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("ImageType")
@@ -485,6 +485,67 @@ namespace Yenilen.Infrastructure.Migrations
                     b.ToTable("Images");
                 });
 
+            modelBuilder.Entity("Yenilen.Domain.Entities.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<Guid>("AppUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CreateUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedByIp")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DeleteAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("DeleteUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Expires")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("RevokedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("UpdateUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("Uuid")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.ToTable("RefreshTokens");
+                });
+
             modelBuilder.Entity("Yenilen.Domain.Entities.Review", b =>
                 {
                     b.Property<int>("Id")
@@ -505,7 +566,7 @@ namespace Yenilen.Infrastructure.Migrations
                     b.Property<DateTime?>("DeleteAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("DeleteUserId")
+                    b.Property<Guid?>("DeleteUserId")
                         .HasColumnType("uuid");
 
                     b.Property<bool>("IsActive")
@@ -581,7 +642,7 @@ namespace Yenilen.Infrastructure.Migrations
                     b.Property<DateTime?>("DeleteAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("DeleteUserId")
+                    b.Property<Guid?>("DeleteUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Description")
@@ -643,7 +704,7 @@ namespace Yenilen.Infrastructure.Migrations
                     b.Property<DateTime?>("DeleteAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("DeleteUserId")
+                    b.Property<Guid?>("DeleteUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Email")
@@ -715,7 +776,7 @@ namespace Yenilen.Infrastructure.Migrations
                     b.Property<DateTime?>("DeleteAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("DeleteUserId")
+                    b.Property<Guid?>("DeleteUserId")
                         .HasColumnType("uuid");
 
                     b.Property<TimeSpan>("EndTime")
@@ -776,7 +837,7 @@ namespace Yenilen.Infrastructure.Migrations
                     b.Property<DateTime?>("DeleteAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("DeleteUserId")
+                    b.Property<Guid?>("DeleteUserId")
                         .HasColumnType("uuid");
 
                     b.Property<bool>("IsActive")
@@ -848,7 +909,7 @@ namespace Yenilen.Infrastructure.Migrations
                     b.Property<DateTime?>("DeleteAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("DeleteUserId")
+                    b.Property<Guid?>("DeleteUserId")
                         .HasColumnType("uuid");
 
                     b.Property<bool>("IsActive")
@@ -899,7 +960,7 @@ namespace Yenilen.Infrastructure.Migrations
                     b.Property<DateTime?>("DeleteAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("DeleteUserId")
+                    b.Property<Guid?>("DeleteUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("ImageUrl")
@@ -939,6 +1000,9 @@ namespace Yenilen.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<Guid>("AppUserId")
+                        .HasColumnType("uuid");
+
                     b.Property<int?>("AvatarImageId")
                         .HasColumnType("integer");
 
@@ -954,7 +1018,7 @@ namespace Yenilen.Infrastructure.Migrations
                     b.Property<DateTime?>("DeleteAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("DeleteUserId")
+                    b.Property<Guid?>("DeleteUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Email")
@@ -995,6 +1059,8 @@ namespace Yenilen.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
 
                     b.HasIndex("AvatarImageId");
 
@@ -1268,6 +1334,17 @@ namespace Yenilen.Infrastructure.Migrations
                     b.Navigation("Store");
                 });
 
+            modelBuilder.Entity("Yenilen.Domain.Entities.RefreshToken", b =>
+                {
+                    b.HasOne("Yenilen.Domain.Users.AppUser", "AppUser")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+                });
+
             modelBuilder.Entity("Yenilen.Domain.Entities.Review", b =>
                 {
                     b.HasOne("Yenilen.Domain.Entities.User", "Author")
@@ -1357,9 +1434,17 @@ namespace Yenilen.Infrastructure.Migrations
 
             modelBuilder.Entity("Yenilen.Domain.Entities.User", b =>
                 {
+                    b.HasOne("Yenilen.Domain.Users.AppUser", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Yenilen.Domain.Entities.Image", "AvatarUrl")
                         .WithMany()
                         .HasForeignKey("AvatarImageId");
+
+                    b.Navigation("AppUser");
 
                     b.Navigation("AvatarUrl");
                 });
@@ -1398,6 +1483,11 @@ namespace Yenilen.Infrastructure.Migrations
                     b.Navigation("Appointments");
 
                     b.Navigation("Favourites");
+                });
+
+            modelBuilder.Entity("Yenilen.Domain.Users.AppUser", b =>
+                {
+                    b.Navigation("RefreshTokens");
                 });
 #pragma warning restore 612, 618
         }

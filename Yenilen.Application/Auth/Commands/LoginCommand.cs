@@ -11,5 +11,6 @@ public sealed class LoginCommand:IRequest<Result<LoginCommandResponse>>
 
 public sealed class LoginCommandResponse
 {
-    public string AccessToken { get; set; }
+    public string? FullName { get; set; }
+    public string? Email { get; set; }
 }

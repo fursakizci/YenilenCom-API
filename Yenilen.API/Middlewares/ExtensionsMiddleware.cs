@@ -11,21 +11,21 @@ public class ExtensionsMiddleware
         {
             var userManager = scoped.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
 
-            if (!userManager.Users.Any(p => p.UserName == "admin"))
+            if (!userManager.Users.Any(p => p.UserName == "fursakizci"))
             {
                 AppUser user = new()
                 {
-                    UserName = "admin",
-                    Email = "admin@admin.com",
-                    FirstName = "Taner",
-                    LastName = "Saydam",
+                    UserName = "fursakizci",
+                    Email = "fursakizci@gmail.com",
+                    FirstName = "Furkan",
+                    LastName = "SAKIZCI",
                     EmailConfirmed = true,
-                    CreatedAt = DateTime.UtcNow 
+                    CreatedAt = DateTime.UtcNow
                 };
 
                 user.CreateUserId = user.Id;
                 
-                userManager.CreateAsync(user, "1").Wait();
+                userManager.CreateAsync(user, "2").Wait();
             }
         }
     }

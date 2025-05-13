@@ -29,10 +29,10 @@ public class UserController:ControllerBase
         return Ok(user);
     }
     
-    [HttpGet("profile/{id}")]
-    public async Task<IActionResult> GetProfileByUserId(int id)
+    [HttpGet("profile/")]
+    public async Task<IActionResult> GetProfileByUserId([FromQuery] GetProfileByIdQuery query)
     {
-        var user = await _mediator.Send(new GetProfileByIdQuery(id));
+        var user = await _mediator.Send(query);
         if (user == null) return NotFound(new { message = "Kullanici Bulunamadi." });
         return Ok(user);
     }
@@ -59,17 +59,11 @@ public class UserController:ControllerBase
         return Ok(new { Id = userId });
     }
 
-    [HttpPost("{id}/address")]
+    [HttpPost("address")]
     public async Task<IActionResult> UserAddAddress([FromBody] AddUserAddressCommand command)
     {
         var userId = await _mediator.Send(command);
         return Ok(new {Id = userId});
-    }
-    
-    [HttpGet("addresses")]
-    public async Task<IActionResult> UserGetAddresses()
-    {
-        return Ok();
     }
 
     [HttpPost("favourite")]

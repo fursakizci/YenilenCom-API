@@ -1,6 +1,8 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Yenilen.Application.Services;
@@ -9,7 +11,7 @@ using Yenilen.Infrastructure.Options;
 
 namespace Yenilen.Infrastructure.Services;
 
-internal sealed class JwtProvider(IOptions<JwtOptions> options) : IJwtProvider
+internal sealed class JwtProvider(IOptions<JwtOptions> options,  IHttpContextAccessor httpContextAccessor) : IJwtProvider
 {
     public Task<string> CreateTokenAsync(AppUser user, CancellationToken cancellationToken = default)
     {
@@ -18,8 +20,8 @@ internal sealed class JwtProvider(IOptions<JwtOptions> options) : IJwtProvider
             new Claim("user-id", user.Id.ToString())
         };
 
-        var expires = DateTime.Now.AddDays(1);
-
+        var expires = options.Value.ExpirationTimeInHour;
+        
         SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(options.Value.SecretKey));
         SigningCredentials signingCredentials = new(securityKey, SecurityAlgorithms.HmacSha512);
         
@@ -28,7 +30,7 @@ internal sealed class JwtProvider(IOptions<JwtOptions> options) : IJwtProvider
             audience: options.Value.Audience,
             claims: claims,
             notBefore: DateTime.Now,
-            expires: expires,
+            expires: DateTime.UtcNow.AddHours(expires),
             signingCredentials: signingCredentials);
 
         JwtSecurityTokenHandler handler = new();
@@ -36,5 +38,26 @@ internal sealed class JwtProvider(IOptions<JwtOptions> options) : IJwtProvider
         string token = handler.WriteToken(securityToken);
 
         return Task.FromResult(token);
+    }
+    
+    public string GenerateRefreshToken()
+    {
+        var randomNumber = new byte[64];
+        using var rng = RandomNumberGenerator.Create();
+        rng.GetBytes(randomNumber);
+        return Convert.ToBase64String(randomNumber);
+    }
+
+    public void WriteAuthTokenAsHttpOnlyCookie(string cookieName, string token)
+    {
+        httpContextAccessor?.HttpContext?.Response.Cookies.Append(cookieName,token,
+            new CookieOptions
+            {
+                HttpOnly = false,
+                Expires = DateTime.UtcNow.AddHours(options.Value.ExpirationTimeInHour),
+                IsEssential = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict
+            });
     }
 }

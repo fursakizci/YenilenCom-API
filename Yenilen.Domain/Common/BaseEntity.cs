@@ -5,7 +5,6 @@ public class BaseEntity
     public BaseEntity()
     {
         Uuid = Guid.NewGuid();
-        CreatedAt = DateTime.UtcNow;
         IsActive = true;
         IsDeleted = false;
     }
@@ -16,7 +15,7 @@ public class BaseEntity
 
     public Guid CreateUserId { get; set; } = default!;
     public Guid? UpdateUserId { get; set; }
-    public Guid DeleteUserId { get; set; }
+    public Guid? DeleteUserId { get; set; }
     
     public bool IsActive { get; set; }
     public DateTime CreatedAt { get; set; }

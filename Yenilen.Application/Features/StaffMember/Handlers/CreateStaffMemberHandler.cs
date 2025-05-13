@@ -2,6 +2,7 @@ using AutoMapper;
 using MediatR;
 using Yenilen.Application.Features.StaffMember.Commands;
 using Yenilen.Application.Interfaces;
+using Yenilen.Application.Services;
 using Yenilen.Domain.Entities;
 
 namespace Yenilen.Application.Features.StaffMember.Handlers;

@@ -3,40 +3,53 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TS.Result;
 using Yenilen.Application.Auth.Commands;
+using Yenilen.Application.Interfaces;
 using Yenilen.Application.Services;
+using Yenilen.Application.Services.Auth;
+using Yenilen.Domain.Entities;
 using Yenilen.Domain.Users;
 
 namespace Yenilen.Application.Auth.Handlers;
 
 internal sealed class LoginHandler:IRequestHandler<LoginCommand,Result<LoginCommandResponse>>
 {
-    private UserManager<AppUser> _userManager;
-    private SignInManager<AppUser> _signInManager;
-    private IJwtProvider _jwtProvider;
+    private readonly UserManager<AppUser> _userManager;
+    private readonly SignInManager<AppUser> _signInManager;
+    private readonly IRefreshTokenRepository _refreshTokenRepository;
+    private readonly IJwtProvider _jwtProvider;
+    private readonly ITokenService _tokenService;
+    private readonly IUnitOfWork _unitOfWork;
 
     public LoginHandler(UserManager<AppUser> userManager
     ,SignInManager<AppUser> signInManager,
-    IJwtProvider jwtProvider)
+    IRefreshTokenRepository refreshTokenRepository,
+    IJwtProvider jwtProvider,
+    ITokenService tokenService,
+    IUnitOfWork unitOfWork
+    )
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _refreshTokenRepository = refreshTokenRepository;
         _jwtProvider = jwtProvider;
+        _tokenService = tokenService;
+        _unitOfWork = unitOfWork;
     }
     
     public async Task<Result<LoginCommandResponse>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        AppUser? user = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == request.Email, cancellationToken);
+        AppUser? appUser = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == request.Email, cancellationToken);
 
-        if (user is null)
+        if (appUser is null)
         {
             return Result<LoginCommandResponse>.Failure("Kullanici bulunamadi.");
         }
 
-        SignInResult signInResult = await _signInManager.CheckPasswordSignInAsync(user, request.Password, true);
+        SignInResult signInResult = await _signInManager.CheckPasswordSignInAsync(appUser, request.Password, true);
 
         if (signInResult.IsLockedOut)
         {
-            TimeSpan? timeSpan = user.LockoutEnd - DateTime.UtcNow;
+            TimeSpan? timeSpan = appUser.LockoutEnd - DateTime.UtcNow;
             
             if (timeSpan is not null)
                 return (500, $"Şifrenizi 5 defa yanlış girdiğiniz için kullanıcı {Math.Ceiling(timeSpan.Value.TotalMinutes)} dakika süreyle bloke edilmiştir");
@@ -54,12 +67,19 @@ internal sealed class LoginHandler:IRequestHandler<LoginCommand,Result<LoginComm
             return (500, "Şifreniz yanlış");
         }
 
-        var token = await _jwtProvider.CreateTokenAsync(user, cancellationToken);
+        var (accessToken, refreshToken) = await _tokenService.GenerateTokensAsync(appUser);
+        
+        await _refreshTokenRepository.AddAsync(refreshToken);
+        await _unitOfWork.SaveChangesAsync(appUser.Id,cancellationToken);
         
         var response = new LoginCommandResponse()
         {
-            AccessToken = token
+            FullName = appUser.FullName,
+            Email = appUser.Email
         };
+        
+        _jwtProvider.WriteAuthTokenAsHttpOnlyCookie("ACCESS_TOKEN", accessToken);
+        _jwtProvider.WriteAuthTokenAsHttpOnlyCookie("REFRESH_TOKEN", refreshToken.Token);
 
         return response;
     }
