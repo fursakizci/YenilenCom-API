@@ -6,9 +6,5 @@ namespace Yenilen.Application.Features.Profile.Queries;
 public class GetProfileByIdQuery:IRequest<ProfileDto>
 {
     public int UserId { get; set; }
-
-    public GetProfileByIdQuery(int userId)
-    {
-        UserId = userId;
-    }
+    
 }

@@ -8,6 +8,11 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
+        builder.HasOne(u => u.AppUser)
+            .WithMany()
+            .HasForeignKey(u => u.AppUserId)
+            .OnDelete(DeleteBehavior.Restrict);
+        
         builder.Property(u => u.FirstName)
             .IsRequired()
             .HasMaxLength(100);

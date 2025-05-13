@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Yenilen.Application.Features.Users.Commands;
 using Yenilen.Application.Interfaces;
+using Yenilen.Application.Services;
 using Yenilen.Domain.Entities;
 
 namespace Yenilen.Application.Features.User.Handlers;

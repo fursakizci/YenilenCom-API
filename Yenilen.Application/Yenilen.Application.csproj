@@ -14,7 +14,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Auth\" />
       <Folder Include="Features\Profile\Commands\" />
     </ItemGroup>
 

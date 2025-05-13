@@ -5,7 +5,6 @@ namespace Yenilen.Application.Features.User.Commands;
 
 public sealed class AddUserAddressCommand:IRequest<int>
 {
-    public int UserId { get; set; }
     public string Label { get; set; }
     public string FullAddress { get; set; }
     public double Latitude { get; set; }
