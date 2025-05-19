@@ -25,17 +25,20 @@ internal sealed class UserRepository : GenericRepository<User, AppDbContext>, IU
         return await _dbSet.AnyAsync(i => i.Email == email || i.PhoneNumber == phoneNumber);
     }
 
-    public async Task<User?> GetByIdAsync(int id, bool includeRelated = false)
+    public async Task<User?> GetByIdAsync(Guid? userId, bool includeRelated = false)
     {
         if (!includeRelated)
         {
-            return await _dbSet.FindAsync(id);
+            return await _dbSet.FindAsync(userId);
         }
-
+        
+        if (userId == Guid.Empty || userId is null)
+            return new User();
+        
         return await _dbSet
             .Include(u => u.Addresses)
             .Include(u => u.AvatarUrl)
-            .FirstOrDefaultAsync(u => u.Id == id);
+            .FirstOrDefaultAsync(u => u.AppUserId == userId);
     }
 
     public async Task<User?> GetFavouriteByIdAsync(int id)

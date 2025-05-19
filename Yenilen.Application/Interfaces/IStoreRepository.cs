@@ -6,4 +6,5 @@ public interface IStoreRepository:IGenericRepository<Store>
 {
     Task<string> GetStoreFullAddressById(int id);
     Task<Store> GetStoreWithDetailsAsync(int id);
+    Task<Store> GetStoreWithWorkingTimesAsync(int id);
 }

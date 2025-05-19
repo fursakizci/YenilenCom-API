@@ -50,7 +50,7 @@ public class CreateAppointmetnHandler:IRequestHandler<CreateAppointmentCommand,i
 
         var services = await _serviceRepository.GetByIdsAsync(request.ServicesId, cancellationToken);
         var appointment =  _mapper.Map<Appointment>(request);
-
+        appointment.StartTime = DateTime.SpecifyKind(request.AppointmentDate, DateTimeKind.Utc);
         appointment.Services = services.ToList();
         
         await _appointmentRepository.AddAsync(appointment);

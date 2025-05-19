@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Yenilen.Application.Features.Category.Commands;
 using Yenilen.Application.Features.Service.Commands;
 using Yenilen.Application.Features.StaffMember.Commands;
+using Yenilen.Application.Features.StaffMember.Queries;
 using Yenilen.Application.Features.Store.Commands;
 
 namespace Yenilen.API.Controllers;
@@ -21,8 +22,8 @@ public class AdminController:ControllerBase
     [HttpPost("store")]
     public async Task<IActionResult> CreateStore([FromBody] CreateStoreCommand command)
     {
-        var storeId = await _mediator.Send(command);
-        return Ok(new { Id = storeId });
+        var result = await _mediator.Send(command);
+        return Ok(result);
     }
 
     [HttpPost("staff/create")]
@@ -32,10 +33,23 @@ public class AdminController:ControllerBase
         return Ok(new{ Id = staffId });
     }
 
+    [HttpPost("staff/assign-working-times")]
+    public async Task<IActionResult> AssignWorkingTimes()
+    {
+        return Ok();
+    }
+
     [HttpPut("update/{id}")]
     public async Task<IActionResult> UpdateStore()
     {
         return Ok();
+    }
+
+    [HttpPut("update/opening-times")]
+    public async Task<IActionResult> UpdateStoreOpeninTimes([FromBody] UpdateStoreOpeningTimesCommand command)
+    {
+        var response = await _mediator.Send(command);
+        return Ok(response);
     }
 
     [HttpPost("category")]
@@ -53,8 +67,9 @@ public class AdminController:ControllerBase
     }
 
     [HttpGet("staff/appointments")]
-    public async Task<IActionResult> GetStaffAppointments()
+    public async Task<IActionResult> GetStaffAppointments([FromQuery] GetStaffAppointmentsByStaffIdQuery query )
     {
-        return Ok();
+        var result = await _mediator.Send(query);
+        return Ok(result);
     }
 }

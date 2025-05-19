@@ -18,7 +18,7 @@ public class GetStaffMembersByStoreIdHandler:IRequestHandler<GetStaffMembersBySt
     }
     public async Task<List<StaffDto>> Handle(GetStaffMembersByStoryIdQuery request, CancellationToken cancellationToken)
     {
-        var staffMembers = await _staffRepository.GetStaffMembersByStoreId(request.StoreId);
+        var staffMembers = await _staffRepository.GetStaffMembersByStoreIdAsync(request.StoreId);
 
         if (staffMembers == null)
             return new List<StaffDto>();

@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using Yenilen.Domain.Common;
 using Yenilen.Domain.Common.Enums;
 
@@ -10,6 +11,10 @@ public class Service:BaseEntity
     public decimal Price { get; set; }
     public CurrencyType Currency { get; set; }
     public TimeSpan Duration { get; set; }
+
+    [NotMapped]
+    public int DurationInSeconds => (int)Duration.TotalSeconds;
+    
     public int CategoryId { get; set; }
     public Category Category { get; set; }
 }

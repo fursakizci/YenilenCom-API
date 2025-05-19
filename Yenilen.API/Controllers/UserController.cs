@@ -2,7 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Yenilen.Application.Features.Booking.Queries;
-using Yenilen.Application.Features.Profile.Queries;
+using Yenilen.Application.Features.User.Queries;
 using Yenilen.Application.Features.User.Queries;
 using Yenilen.Application.Features.User.Commands;
 using Yenilen.Application.Features.Users.Commands;
@@ -29,12 +29,11 @@ public class UserController:ControllerBase
         return Ok(user);
     }
     
-    [HttpGet("profile/")]
-    public async Task<IActionResult> GetProfileByUserId([FromQuery] GetProfileByIdQuery query)
+    [HttpGet("profile")]
+    public async Task<IActionResult> GetProfileByUserId()
     {
-        var user = await _mediator.Send(query);
-        if (user == null) return NotFound(new { message = "Kullanici Bulunamadi." });
-        return Ok(user);
+        var response = await _mediator.Send(new GetProfileByIdQuery());
+        return Ok(response);
     }
     
     [HttpGet("favourite/{id}")]

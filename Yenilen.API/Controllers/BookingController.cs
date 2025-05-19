@@ -16,10 +16,11 @@ public class BookingController:ControllerBase
         _mediator = mediator;
     }
     
-    [HttpGet("dates")]
-    public async Task<IActionResult> GetAvailableDates()
+    [HttpGet("availabilities")]
+    public async Task<IActionResult> GetAvailableDates([FromQuery] GetAvailableSlotsQuery query)
     {
-        return Ok();
+        var result = await _mediator.Send(query);
+        return Ok(result);
     }
     
     [HttpPost("create")]
@@ -29,8 +30,8 @@ public class BookingController:ControllerBase
         return Ok(new { Id = appointmentId });
     }
 
-    [HttpGet("availabilities")]
-    public async Task<IActionResult> GetAllAppointment([FromQuery] GetAvailableSlutsForStaffQuery query)
+    [HttpGet("staff-availabilities")]
+    public async Task<IActionResult> GetAvailableSlots([FromQuery] GetAvailableSlutsForStaffQuery query)
     {
         var result = await _mediator.Send(query);
         return Ok(result);
