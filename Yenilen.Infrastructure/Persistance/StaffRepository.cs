@@ -15,15 +15,10 @@ internal sealed class StaffRepository:GenericRepository<Staff, AppDbContext>,ISt
         _dbSet = _context.Set<Staff>();
     }
 
-    public async Task<IEnumerable<Staff>> GetStaffMembersByStoreId(int id)
+    public async Task<IEnumerable<Staff>> GetStaffMembersByStoreIdAsync(int id)
     {
         return await _dbSet.Where(s => s.StoreId == id)
             .Include(i=>i.Image)
             .ToListAsync();
-    }
-
-    public Task<IQueryable<Staff>> GetAppointmentsByStaffAndDateAsync(int id, DateTime date)
-    {
-        throw new NotImplementedException();
     }
 }

@@ -41,4 +41,13 @@ internal sealed class StoreRepository:GenericRepository<Store, AppDbContext>,ISt
 
         return store ;
     }
+
+    public async Task<Store> GetStoreWithWorkingTimesAsync(int id)
+    {
+        var store = await _dbSet.Where(s => s.Id == id)
+            .Include(s => s.WorkingHours)
+            .FirstOrDefaultAsync();
+
+        return store;
+    }
 }

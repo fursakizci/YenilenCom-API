@@ -21,7 +21,7 @@ internal sealed class GetAvailableSlutsForStaffHandler:IRequestHandler<GetAvaila
     
     public async Task<List<AvailableDateDto>> Handle(GetAvailableSlutsForStaffQuery request, CancellationToken cancellationToken)
     {
-        var staff = await _staffRepository.GetByIdAsync(request.StaffId);
+        var staff = await _staffRepository.GetByIdAsync(request.StaffId);  
         
         if(staff == null){
             throw new InvalidOperationException("Verilen bilgilere ait calisan bulunamadi.");

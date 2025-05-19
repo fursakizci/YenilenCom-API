@@ -4,7 +4,7 @@ using TS.Result;
 
 namespace Yenilen.Application.Auth.Commands;
 
-public class RegisterCommand:IRequest<Result<RegisterCommandResponse>>
+public sealed class RegisterCommand:IRequest<Result<RegisterCommandResponse>>
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }
@@ -17,7 +17,6 @@ public class RegisterCommand:IRequest<Result<RegisterCommandResponse>>
 public sealed class RegisterCommandResponse
 {
     public int UserId { get; set; }
-    //public string AccessToken { get; set; }
 }
 
 public sealed class CreateRegisterCommandValidator : AbstractValidator<RegisterCommand>

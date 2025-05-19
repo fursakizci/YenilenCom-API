@@ -43,7 +43,14 @@ internal sealed class AppDbContext:IdentityDbContext<AppUser,IdentityRole<Guid>,
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         var userId = _requestContextService.GetCurrentUserId();
+        
+        if (userId == Guid.Empty)
+        {
+            return base.SaveChangesAsync(cancellationToken);
+        }
+        
         ApplyAuditInformation(userId);
+        
         return base.SaveChangesAsync(cancellationToken);
     }
 

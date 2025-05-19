@@ -4,7 +4,7 @@ using TS.Result;
 
 namespace Yenilen.Application.Auth.Commands;
 
-public class RefreshCommand:IRequest<Result<RefreshCommandResponse>>
+public sealed class RefreshCommand:IRequest<Result<RefreshCommandResponse>>
 {
     public string RefreshToken { get; set; }
 }

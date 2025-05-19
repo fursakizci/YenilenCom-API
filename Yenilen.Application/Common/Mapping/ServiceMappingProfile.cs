@@ -1,6 +1,7 @@
 using AutoMapper;
 using Yenilen.Application.DTOs;
 using Yenilen.Application.Features.Service.Commands;
+using Yenilen.Domain.Common.Enums;
 using Yenilen.Domain.Entities;
 
 namespace Yenilen.Application.Common.Mapping;
@@ -21,7 +22,8 @@ public class ServiceMappingProfile:Profile
             .ForMember(s => s.Name, opt => opt.MapFrom(src => src.Name))
             .ForMember(s => s.Description, opt => opt.MapFrom(src => src.Description))
             .ForMember(s => s.Price, opt => opt.MapFrom(src => src.Price))
-            .ForMember(s => s.Currency, opt => opt.MapFrom(src => src.CurrencyType))
+            .ForMember(s => s.Currency, opt =>
+                opt.MapFrom(src => Enum.Parse<CurrencyType>(src.CurrencyType!)))
             .ForMember(s => s.Duration, opt => opt.MapFrom(src => src.Duration));
 
     }

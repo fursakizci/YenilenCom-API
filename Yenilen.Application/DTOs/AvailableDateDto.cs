@@ -2,7 +2,6 @@ namespace Yenilen.Application.DTOs;
 
 public class AvailableDateDto
 {
-    
     public DateTime Date { get; set; } // 2024-04-12
     public string DayName { get; set; } // sat
     public string Year { get; set; } //2025

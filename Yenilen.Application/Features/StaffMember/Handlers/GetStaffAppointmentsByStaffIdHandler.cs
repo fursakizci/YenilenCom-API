@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Yenilen.Application.DTOs;
 using Yenilen.Application.Features.StaffMember.Queries;
 using Yenilen.Application.Interfaces;
@@ -27,8 +28,21 @@ internal sealed class GetStaffAppointmentsByStaffIdHandler:IRequestHandler<GetSt
         }
     
         var appointments =
-            _appointmentRepository.Where(a => a.StaffId == request.StaffId);
+            await _appointmentRepository.Where(a => a.StaffId == request.StaffId).ToListAsync();
+
+        var result = new List<AppointmentDto>();
         
-        throw new NotImplementedException();
+        foreach (var appointment in appointments)
+        {
+            var appointmentDto = new AppointmentDto
+            {
+                UserId =  appointment.StaffId,
+                StartTime = appointment.StartTime,
+                Duration = (int)appointment.Duration.TotalMinutes
+            };
+            result.Add(appointmentDto);
+        }
+
+        return result;
     }
 }
