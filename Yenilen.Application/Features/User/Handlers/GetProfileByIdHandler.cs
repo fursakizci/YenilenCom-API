@@ -68,6 +68,6 @@ public class GetProfileByIdHandler : IRequestHandler<GetProfileByIdQuery, Result
                 : null
         };
 
-        return response;
+        return Result<GetProfileByIdQueryResponse>.Succeed(response);
     }
 }

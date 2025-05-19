@@ -1,12 +1,13 @@
 using AutoMapper;
 using MediatR;
+using TS.Result;
 using Yenilen.Application.Features.Category.Commands;
 using Yenilen.Application.Interfaces;
 using Yenilen.Application.Services;
 
 namespace Yenilen.Application.Features.Category.Handlers;
 
-internal sealed class CreateCategoryHandler:IRequestHandler<CreateCategoryCommand, int>
+internal sealed class CreateCategoryHandler:IRequestHandler<CreateCategoryCommand, Result<CreateCategoryCommandResponse>>
 {
     private readonly ICategoryRepository _categoryRepository;
     private readonly IMapper _mapper;
@@ -18,7 +19,7 @@ internal sealed class CreateCategoryHandler:IRequestHandler<CreateCategoryComman
         _mapper = mapper;
         _unitOfWork = unitOfWork;
     }
-    public async Task<int> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
+    public async Task<Result<CreateCategoryCommandResponse>> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
     {
         var isCategoryExist = await _categoryRepository.AnyAsync(x => x.Name == request.Name, cancellationToken);
 
@@ -31,6 +32,11 @@ internal sealed class CreateCategoryHandler:IRequestHandler<CreateCategoryComman
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return category.Id;
+        var result = new CreateCategoryCommandResponse()
+        {
+            CategoryId = category.Id
+        };
+
+        return Result<CreateCategoryCommandResponse>.Succeed(result);
     }
 }

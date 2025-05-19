@@ -1,6 +1,7 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using TS.Result;
 using Yenilen.Application.Features.User.Commands;
 using Yenilen.Application.Interfaces;
 using Yenilen.Application.Services;
@@ -8,7 +9,7 @@ using Yenilen.Application.Services.Common;
 
 namespace Yenilen.Application.Features.User.Handlers;
 
-internal sealed class AddUserAddressHandler : IRequestHandler<AddUserAddressCommand, int>
+internal sealed class AddUserAddressHandler : IRequestHandler<AddUserAddressCommand, Result<AddUserAddressCommandResponse>>
 {
 
     private readonly IUnitOfWork _unitOfWork;
@@ -31,7 +32,7 @@ internal sealed class AddUserAddressHandler : IRequestHandler<AddUserAddressComm
         _mapper = mapper;
     }
     
-    public async Task<int> Handle(AddUserAddressCommand request, CancellationToken cancellationToken)
+    public async Task<Result<AddUserAddressCommandResponse>> Handle(AddUserAddressCommand request, CancellationToken cancellationToken)
     {
         var userId = _requestContextService.GetCurrentUserId();
 
@@ -48,6 +49,11 @@ internal sealed class AddUserAddressHandler : IRequestHandler<AddUserAddressComm
         
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return newAddress.Id;
+        var response = new AddUserAddressCommandResponse()
+        {
+            AddressId = newAddress.Id
+        };
+
+        return Result<AddUserAddressCommandResponse>.Succeed(response);
     }
 }

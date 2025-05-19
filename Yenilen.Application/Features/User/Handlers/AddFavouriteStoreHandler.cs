@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using TS.Result;
 using Yenilen.Application.Features.User.Commands;
 using Yenilen.Application.Interfaces;
 using Yenilen.Application.Services;
@@ -7,7 +8,7 @@ using Yenilen.Domain.Entities;
 
 namespace Yenilen.Application.Features.User.Handlers;
 
-public class AddFavouriteStoreHandler:IRequestHandler<AddFavouriteStoreCommand, int>
+public class AddFavouriteStoreHandler:IRequestHandler<AddFavouriteStoreCommand, Result<AddFavouriteStoreCommandResponse>>
 {
     private readonly IStoreRepository _storeRepository;
     private readonly IUserRepository _userRepository;
@@ -22,7 +23,7 @@ public class AddFavouriteStoreHandler:IRequestHandler<AddFavouriteStoreCommand, 
         _mapper = mapper;
         _unitOfWork = unitOfWork;
     }
-    public async Task<int> Handle(AddFavouriteStoreCommand request, CancellationToken cancellationToken)
+    public async Task<Result<AddFavouriteStoreCommandResponse>> Handle(AddFavouriteStoreCommand request, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByIdAsync(request.UserId);
         var store = await _storeRepository.GetByIdAsync(request.StoreId);
@@ -47,6 +48,11 @@ public class AddFavouriteStoreHandler:IRequestHandler<AddFavouriteStoreCommand, 
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return favourite.Id;
+        var response = new AddFavouriteStoreCommandResponse()
+        {
+            FavouriteId = favourite.Id
+        };
+
+        return Result<AddFavouriteStoreCommandResponse>.Succeed(response);
     }
 }

@@ -1,12 +1,13 @@
 using AutoMapper;
 using MediatR;
+using TS.Result;
 using Yenilen.Application.Features.Tag.Commands;
 using Yenilen.Application.Interfaces;
 using Yenilen.Application.Services;
 
 namespace Yenilen.Application.Features.Tag.Handler;
 
-internal sealed class CreateTagHandler : IRequestHandler<CreateTagCommand, int>
+internal sealed class CreateTagHandler : IRequestHandler<CreateTagCommand, Result<CreateTagCommandResponse>>
 {
 
     private readonly ITagRepository _tagRepository;
@@ -20,7 +21,7 @@ internal sealed class CreateTagHandler : IRequestHandler<CreateTagCommand, int>
         _unitOfWork = unitOfWork;
     }
     
-    public async Task<int> Handle(CreateTagCommand request, CancellationToken cancellationToken)
+    public async Task<Result<CreateTagCommandResponse>> Handle(CreateTagCommand request, CancellationToken cancellationToken)
     {
 
         var tag = _mapper.Map<Domain.Entities.Tag>(request);
@@ -29,6 +30,11 @@ internal sealed class CreateTagHandler : IRequestHandler<CreateTagCommand, int>
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return tag.Id;
+        var response = new CreateTagCommandResponse()
+        {
+            tagId = tag.Id
+        };
+
+        return Result<CreateTagCommandResponse>.Succeed(response);
     }
 }

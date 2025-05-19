@@ -1,13 +1,26 @@
 using MediatR;
+using TS.Result;
 using Yenilen.Application.DTOs;
 
 namespace Yenilen.Application.Features.Store.Queries;
 
-public sealed class GetStoresByDistanceQuery:IRequest<List<StoreDto>>
+public sealed class GetStoresByDistanceQuery:IRequest<Result<List<GetStoresByDistanceQueryResponse>>>
 {
     public double MinLatitude { get; set; }
     public double MaxLatitude { get; set; }
     public double MinLongitude { get; set; }
     public double MaxLongitude { get; set; }
     public int? TagId { get; set; }
+}
+
+public sealed class GetStoresByDistanceQueryResponse
+{
+public int StoreId { get; set; }
+public string? Name { get; set; }
+public double? Rating  { get; set; }
+public int CountOfReview { get; set; }
+public List<string>? ImageUrls { get; set; }
+public double Distance { get; set; }
+public AddressDto Address { get; set; }
+public List<ServiceDto> Services { get; set; }
 }

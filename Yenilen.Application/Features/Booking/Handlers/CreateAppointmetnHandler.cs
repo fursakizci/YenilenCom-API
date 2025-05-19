@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using TS.Result;
 using Yenilen.Application.Features.Booking.Commands;
 using Yenilen.Application.Interfaces;
 using Yenilen.Application.Services;
@@ -7,7 +8,7 @@ using Yenilen.Domain.Entities;
 
 namespace Yenilen.Application.Features.Booking.Handlers;
 
-public class CreateAppointmetnHandler:IRequestHandler<CreateAppointmentCommand,int>
+public class CreateAppointmetnHandler:IRequestHandler<CreateAppointmentCommand,Result<CreateAppointmentResponse>>
 {
     private readonly IAppointmentRepository _appointmentRepository;
     private readonly IServiceRepository _serviceRepository;
@@ -30,7 +31,7 @@ public class CreateAppointmetnHandler:IRequestHandler<CreateAppointmentCommand,i
         _unitOfWork = unitOfWork;
     }
     
-    public async Task<int> Handle(CreateAppointmentCommand request, CancellationToken cancellationToken)
+    public async Task<Result<CreateAppointmentResponse>> Handle(CreateAppointmentCommand request, CancellationToken cancellationToken)
     {
 
         var storeExist = await _storeRepository.AnyAsync(s => s.Id == request.StoreId);
@@ -57,6 +58,11 @@ public class CreateAppointmetnHandler:IRequestHandler<CreateAppointmentCommand,i
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return appointment.Id;
+        var result = new CreateAppointmentResponse
+        {
+            AppointmentId = appointment.Id
+        };
+
+        return Result<CreateAppointmentResponse>.Succeed(result);
     }
 }

@@ -22,11 +22,11 @@ public class UserController:ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetUserById(int id)
+    public async Task<IActionResult> GetUserById([FromQuery] GetByIdUserQuery query)
     {
-        var user = await _mediator.Send(new GetByIdUserQuery(id));
-        if (user == null) return NotFound(new { message = "Kullanici Bulunamadi." });
-        return Ok(user);
+        var result = await _mediator.Send(query);
+        //if (user == null) return NotFound(new { message = "Kullanici Bulunamadi." });
+        return Ok(result);
     }
     
     [HttpGet("profile")]
@@ -37,11 +37,11 @@ public class UserController:ControllerBase
     }
     
     [HttpGet("favourite/{id}")]
-    public async Task<IActionResult> GetFavouritesByUserId(int id)
+    public async Task<IActionResult> GetFavouritesByUserId([FromQuery] GetAllFavouritesByUserIdQuery query)
     {
-        var user = await _mediator.Send(new GetAllFavouritesByUserIdQuery(id));
-        if (user == null) return NotFound(new { message = "Kullanici Bulunamadi." });
-        return Ok(user);
+        var result = await _mediator.Send(query);
+        // if (user == null) return NotFound(new { message = "Kullanici Bulunamadi." });
+        return Ok(result);
     }
     
     [HttpGet("appointments")]
@@ -54,21 +54,21 @@ public class UserController:ControllerBase
     [HttpPost("create")]
     public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand command)
     {
-        var userId = await _mediator.Send(command);
-        return Ok(new { Id = userId });
+        var result = await _mediator.Send(command);
+        return Ok(result);
     }
 
     [HttpPost("address")]
     public async Task<IActionResult> UserAddAddress([FromBody] AddUserAddressCommand command)
     {
-        var userId = await _mediator.Send(command);
-        return Ok(new {Id = userId});
+        var result = await _mediator.Send(command);
+        return Ok(result);
     }
 
     [HttpPost("favourite")]
     public async Task<IActionResult> AddFavouriteStore([FromBody] AddFavouriteStoreCommand command)
     {
-        var favouriteId = await _mediator.Send(command);
-        return Ok(new{ Id = favouriteId });
+        var result = await _mediator.Send(command);
+        return Ok(result);
     }
 }

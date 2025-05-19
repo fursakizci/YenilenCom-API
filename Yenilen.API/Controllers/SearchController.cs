@@ -34,8 +34,8 @@ public class SearchController:ControllerBase
     [HttpPost("create-tag")]
     public async Task<IActionResult> CreateTag([FromBody] CreateTagCommand command)
     {
-        var tagId = await _mediator.Send(command);
-        return Ok(new {Id = tagId});
+        var result = await _mediator.Send(command);
+        return Ok(result);
     }
 
     [HttpGet("searchBar")]

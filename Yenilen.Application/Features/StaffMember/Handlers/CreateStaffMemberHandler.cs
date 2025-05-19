@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using TS.Result;
 using Yenilen.Application.Features.StaffMember.Commands;
 using Yenilen.Application.Interfaces;
 using Yenilen.Application.Services;
@@ -7,7 +8,7 @@ using Yenilen.Domain.Entities;
 
 namespace Yenilen.Application.Features.StaffMember.Handlers;
 
-internal sealed class CreateStaffMemberHandler:IRequestHandler<CreateStaffMemberCommand,int>
+internal sealed class CreateStaffMemberHandler:IRequestHandler<CreateStaffMemberCommand,Result<CreateStaffMemberCommandResponse>>
 {
     private readonly IStaffRepository _staffRepository;
     private readonly IMapper _mapper;
@@ -21,7 +22,7 @@ internal sealed class CreateStaffMemberHandler:IRequestHandler<CreateStaffMember
         _unitOfWork = unitOfWork;
     }
     
-    public async Task<int> Handle(CreateStaffMemberCommand request, CancellationToken cancellationToken)
+    public async Task<Result<CreateStaffMemberCommandResponse>> Handle(CreateStaffMemberCommand request, CancellationToken cancellationToken)
     {
         var staff = _mapper.Map<Staff>(request);
 
@@ -29,6 +30,11 @@ internal sealed class CreateStaffMemberHandler:IRequestHandler<CreateStaffMember
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return staff.Id;
+        var result = new CreateStaffMemberCommandResponse()
+        {
+            StaffId = staff.Id
+        };
+
+        return Result<CreateStaffMemberCommandResponse>.Succeed(result);
     }
 }

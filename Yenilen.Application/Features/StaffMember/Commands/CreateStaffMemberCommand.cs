@@ -1,9 +1,10 @@
 using FluentValidation;
 using MediatR;
+using TS.Result;
 
 namespace Yenilen.Application.Features.StaffMember.Commands;
 
-public sealed class CreateStaffMemberCommand:IRequest<int>
+public sealed class CreateStaffMemberCommand:IRequest<Result<CreateStaffMemberCommandResponse>>
 {
     public string StoreId { get; set; }
     public string Name { get; set; }
@@ -13,6 +14,11 @@ public sealed class CreateStaffMemberCommand:IRequest<int>
     //public DateTime StartDate { get; set; }
     public string? Bio { get; set; }
     public string? ImageUrl { get; set; }
+}
+
+public sealed class CreateStaffMemberCommandResponse
+{
+    public int StaffId { get; set; }
 }
 
 public sealed class CreateStaffMemberCommandValidator : AbstractValidator<CreateStaffMemberCommand>

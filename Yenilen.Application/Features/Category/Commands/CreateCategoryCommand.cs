@@ -1,13 +1,19 @@
 using FluentValidation;
 using MediatR;
+using TS.Result;
 
 namespace Yenilen.Application.Features.Category.Commands;
 
-public sealed class CreateCategoryCommand: IRequest<int>
+public sealed class CreateCategoryCommand: IRequest<Result<CreateCategoryCommandResponse>>
 {
     public string Name { get; set; }
     public int StoreId { get; set; }
     
+}
+
+public sealed class CreateCategoryCommandResponse
+{
+    public int CategoryId { get; set; }
 }
 
 public sealed class CreateCategoryCommandValidator : AbstractValidator<CreateCategoryCommand>
