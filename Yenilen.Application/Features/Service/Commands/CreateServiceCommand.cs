@@ -1,9 +1,10 @@
 using FluentValidation;
 using MediatR;
+using TS.Result;
 
 namespace Yenilen.Application.Features.Service.Commands;
 
-public sealed class CreateServiceCommand: IRequest<int>
+public sealed class CreateServiceCommand: IRequest<Result<CreateServiceCommandResponse>>
 {
     public int CategoryId { get; set; }
     public string Name { get; set; }
@@ -12,6 +13,11 @@ public sealed class CreateServiceCommand: IRequest<int>
     public string? CurrencyType { get; set; }
     public int DurationInMinutes { get; set; }
     public TimeSpan Duration => TimeSpan.FromMinutes(DurationInMinutes);
+}
+
+public sealed class CreateServiceCommandResponse
+{
+    public int ServiceId { get; set; }
 }
 
 public sealed class CreateServiceCommandValidator : AbstractValidator<CreateServiceCommand>

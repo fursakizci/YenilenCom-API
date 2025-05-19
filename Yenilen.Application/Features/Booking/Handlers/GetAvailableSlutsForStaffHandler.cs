@@ -1,11 +1,12 @@
 using MediatR;
+using TS.Result;
 using Yenilen.Application.DTOs;
 using Yenilen.Application.Features.Booking.Queries;
 using Yenilen.Application.Interfaces;
 
 namespace Yenilen.Application.Features.Booking.Handlers;
 
-internal sealed class GetAvailableSlutsForStaffHandler:IRequestHandler<GetAvailableSlutsForStaffQuery,List<AvailableDateDto>>
+internal sealed class GetAvailableSlutsForStaffHandler:IRequestHandler<GetAvailableSlutsForStaffQuery,Result<List<GetAvailableSlutsForStaffQueryResponse>>>
 {
     private readonly IStaffRepository _staffRepository;
     private readonly IAppointmentRepository _appointmentRepository;
@@ -19,7 +20,7 @@ internal sealed class GetAvailableSlutsForStaffHandler:IRequestHandler<GetAvaila
 
     }
     
-    public async Task<List<AvailableDateDto>> Handle(GetAvailableSlutsForStaffQuery request, CancellationToken cancellationToken)
+    public async Task<Result<List<GetAvailableSlutsForStaffQueryResponse>>> Handle(GetAvailableSlutsForStaffQuery request, CancellationToken cancellationToken)
     {
         var staff = await _staffRepository.GetByIdAsync(request.StaffId);  
         
@@ -28,7 +29,7 @@ internal sealed class GetAvailableSlutsForStaffHandler:IRequestHandler<GetAvaila
         }
 
         var today = DateTime.UtcNow.Date;
-        var result = new List<AvailableDateDto>();
+        var result = new List<GetAvailableSlutsForStaffQueryResponse>();
 
         var staffWorkingHours = await _staffWorkingHourRepository.GetStaffWorkingHoursByStaffId(staff.Id);
 
@@ -75,7 +76,7 @@ internal sealed class GetAvailableSlutsForStaffHandler:IRequestHandler<GetAvaila
 
             if (timeSlots.Any())
             {
-                result.Add(new AvailableDateDto
+                result.Add(new GetAvailableSlutsForStaffQueryResponse
                 {
                     Date = date,
                     DayName = date.ToString("dddd"),
@@ -86,6 +87,6 @@ internal sealed class GetAvailableSlutsForStaffHandler:IRequestHandler<GetAvaila
                 });
             }
         }
-        return result;
+        return Result<List<GetAvailableSlutsForStaffQueryResponse>>.Succeed(result);
     }
 }

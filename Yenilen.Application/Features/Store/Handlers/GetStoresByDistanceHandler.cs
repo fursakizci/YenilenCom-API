@@ -1,11 +1,12 @@
 using MediatR;
+using TS.Result;
 using Yenilen.Application.DTOs;
 using Yenilen.Application.Features.Store.Queries;
 using Yenilen.Application.Interfaces;
 
 namespace Yenilen.Application.Features.Store.Handlers;
 
-internal sealed class GetStoresByDistanceHandler:IRequestHandler<GetStoresByDistanceQuery,List<StoreDto>>
+internal sealed class GetStoresByDistanceHandler:IRequestHandler<GetStoresByDistanceQuery,Result<List<GetStoresByDistanceQueryResponse>>>
 {
     private readonly IStoreRepository _storeRepository;
 
@@ -14,7 +15,7 @@ internal sealed class GetStoresByDistanceHandler:IRequestHandler<GetStoresByDist
         _storeRepository = storeRepository;
     }
     
-    public async Task<List<StoreDto>> Handle(GetStoresByDistanceQuery request, CancellationToken cancellationToken)
+    public Task<Result<List<GetStoresByDistanceQueryResponse>>> Handle(GetStoresByDistanceQuery request, CancellationToken cancellationToken)
     {
         var query = _storeRepository.Where(s => s.Address != null &&
                                                 s.Address.Latitude >= request.MinLatitude &&
@@ -28,7 +29,7 @@ internal sealed class GetStoresByDistanceHandler:IRequestHandler<GetStoresByDist
         }
 
         var storeList = query
-            .Select(s => new StoreDto
+            .Select(s => new GetStoresByDistanceQueryResponse
             {
                 StoreId = s.Id,
                 Name = s.StoreName,
@@ -58,6 +59,6 @@ internal sealed class GetStoresByDistanceHandler:IRequestHandler<GetStoresByDist
                     }).ToList()
             }).ToList();
         
-        return storeList;
+        return Task.FromResult(Result<List<GetStoresByDistanceQueryResponse>>.Succeed(storeList));
     }
 }

@@ -1,4 +1,5 @@
 using MediatR;
+using TS.Result;
 using Yenilen.Application.DTOs;
 using Yenilen.Application.Features.Booking.Queries;
 using Yenilen.Application.Interfaces;
@@ -7,7 +8,7 @@ using Yenilen.Domain.Entities;
 
 namespace Yenilen.Application.Features.Booking.Handlers;
 
-internal sealed class GetAvailableSlotsHandler:IRequestHandler<GetAvailableSlotsQuery,List<AvailableDateDto>>
+internal sealed class GetAvailableSlotsHandler:IRequestHandler<GetAvailableSlotsQuery,Result<List<GetAvailableSlotsQueryResponse>>>
 {
     
     private readonly IStaffRepository _staffRepository;
@@ -24,14 +25,14 @@ internal sealed class GetAvailableSlotsHandler:IRequestHandler<GetAvailableSlots
         _staffWorkingHourRepository = staffWorkingHourRepository;        
     }
     
-   public async Task<List<AvailableDateDto>> Handle(GetAvailableSlotsQuery request,
+   public async Task<Result<List<GetAvailableSlotsQueryResponse>>> Handle(GetAvailableSlotsQuery request,
     CancellationToken cancellationToken)
 {
     var timeZone = TimeZoneInfo.FindSystemTimeZoneById(request.TimeZoneId);
     
-    var result = new List<AvailableDateDto>();
-    
-    var startDate = TimeZoneInfo.ConvertTimeFromUtc(request.StartingDate.Date, timeZone).Date;
+    var result = new List<GetAvailableSlotsQueryResponse>();
+
+    var startDate = DateTime.UtcNow;    //    TimeZoneInfo.ConvertTimeFromUtc(request.StartingDate.Date, timeZone).Date;
     
     var staffList = await _staffRepository.GetStaffMembersByStoreIdAsync(request.StoreId) ;
     
@@ -40,7 +41,7 @@ internal sealed class GetAvailableSlotsHandler:IRequestHandler<GetAvailableSlots
     foreach (var staff in staffList)
     {
         var dailyTotalServiceDuration = await _appointmentRepository
-            .GetDailyServiceDurationsByStaffIdAsync(staff.Id, request.StartingDate.Date, request.StartingDate.AddDays(14).Date, request.TimeZoneId);
+            .GetDailyServiceDurationsByStaffIdAsync(staff.Id, startDate, startDate.AddDays(14).Date, request.TimeZoneId);
         
         staffWithTotalServiceDuration.AddRange(dailyTotalServiceDuration); 
     }
@@ -61,7 +62,7 @@ internal sealed class GetAvailableSlotsHandler:IRequestHandler<GetAvailableSlots
         var storeOpeningTime = storeWorkingHoursOnCurrentDay.OpeningTime;
         var storeClosingTime = storeWorkingHoursOnCurrentDay.ClosingTime;
             
-        var dailySlots = new AvailableDateDto()
+        var dailySlots = new GetAvailableSlotsQueryResponse()
         {
             Date = currentDate,
             DayName = currentDate.DayOfWeek.ToString(),
@@ -147,8 +148,7 @@ internal sealed class GetAvailableSlotsHandler:IRequestHandler<GetAvailableSlots
              result.Add(dailySlots);
         }
     }
-
-    return result;
+    return Result<List<GetAvailableSlotsQueryResponse>>.Succeed(result);
  }
 }
 

@@ -1,4 +1,5 @@
 using MediatR;
+using TS.Result;
 using Yenilen.Application.DTOs;
 using Yenilen.Application.Features.Store.Queries;
 using Yenilen.Application.Interfaces;
@@ -6,7 +7,7 @@ using Yenilen.Domain.Entities;
 
 namespace Yenilen.Application.Features.Store.Handlers;
 
-internal sealed class GetStoresFromSearchBarHandler:IRequestHandler<GetStoresFromSearchBarQuery,IQueryable<StoreDto>>
+internal sealed class GetStoresFromSearchBarHandler:IRequestHandler<GetStoresFromSearchBarQuery,Result<IQueryable<GetStoresFromSearchBarQueryResponse>>>
 {
     private readonly IStoreRepository _storeRepository;
 
@@ -15,7 +16,7 @@ internal sealed class GetStoresFromSearchBarHandler:IRequestHandler<GetStoresFro
         _storeRepository = storeRepository;
     }
     
-    public Task<IQueryable<StoreDto>> Handle(GetStoresFromSearchBarQuery request, CancellationToken cancellationToken)
+    public Task<Result<IQueryable<GetStoresFromSearchBarQueryResponse>>> Handle(GetStoresFromSearchBarQuery request, CancellationToken cancellationToken)
     {
         var storesInArea = _storeRepository.GetAll().Where(s =>
                 s.Address.Latitude >= request.MinLatitude &&
@@ -24,7 +25,7 @@ internal sealed class GetStoresFromSearchBarHandler:IRequestHandler<GetStoresFro
                 s.Address.Longitude <= request.MaxLongitude 
                 //&& s.Tags.Any(t => t.Id == request.TagId)
                 )
-            .Select(s => new StoreDto
+            .Select(s => new GetStoresFromSearchBarQueryResponse
             {
                 StoreId = s.Id,
                 Name = s.StoreName,
@@ -45,6 +46,6 @@ internal sealed class GetStoresFromSearchBarHandler:IRequestHandler<GetStoresFro
                 })).ToList()
             });
 
-        return Task.FromResult(storesInArea);
+        return Task.FromResult(Result<IQueryable<GetStoresFromSearchBarQueryResponse>>.Succeed(storesInArea));
     }
 }

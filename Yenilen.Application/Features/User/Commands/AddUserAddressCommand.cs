@@ -1,9 +1,10 @@
 using FluentValidation;
 using MediatR;
+using TS.Result;
 
 namespace Yenilen.Application.Features.User.Commands;
 
-public sealed class AddUserAddressCommand:IRequest<int>
+public sealed class AddUserAddressCommand:IRequest<Result<AddUserAddressCommandResponse>>
 {
     public string Label { get; set; }
     public string FullAddress { get; set; }
@@ -13,6 +14,11 @@ public sealed class AddUserAddressCommand:IRequest<int>
     public string PostCode { get; set; }
     public string City { get; set; }
     public string District { get; set; }
+}
+
+public sealed class AddUserAddressCommandResponse
+{
+    public int AddressId { get; set; }
 }
 
 public sealed class AddUserAddressCommandValidator : AbstractValidator<AddUserAddressCommand>

@@ -55,15 +55,15 @@ public class AdminController:ControllerBase
     [HttpPost("category")]
     public async Task<IActionResult> CreateCategoryByStoreId([FromBody] CreateCategoryCommand command)
     {
-        var categoryId = await _mediator.Send(command);
-        return Ok(new { Id = categoryId });
+        var result = await _mediator.Send(command);
+        return Ok(result);
     }
 
     [HttpPost("service")]
     public async Task<IActionResult> CreateServiceByCategoryId([FromBody] CreateServiceCommand command)
     {
-        var serviceId = await _mediator.Send(command);
-        return Ok(new { Id = serviceId });
+        var result = await _mediator.Send(command);
+        return Ok(result);
     }
 
     [HttpGet("staff/appointments")]

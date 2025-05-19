@@ -1,12 +1,13 @@
 using AutoMapper;
 using MediatR;
+using TS.Result;
 using Yenilen.Application.Features.Service.Commands;
 using Yenilen.Application.Interfaces;
 using Yenilen.Application.Services;
 
 namespace Yenilen.Application.Features.Service.Handlers;
 
-internal sealed class CreateServiceHandler : IRequestHandler<CreateServiceCommand,int>
+internal sealed class CreateServiceHandler : IRequestHandler<CreateServiceCommand,Result<CreateServiceCommandResponse>>
 {
 
     private readonly IServiceRepository _serviceRepository;
@@ -21,7 +22,7 @@ internal sealed class CreateServiceHandler : IRequestHandler<CreateServiceComman
         _mapper = mapper;
         _unitOfWork = unitOfWork;
     }
-    public async Task<int> Handle(CreateServiceCommand request, CancellationToken cancellationToken)
+    public async Task<Result<CreateServiceCommandResponse>> Handle(CreateServiceCommand request, CancellationToken cancellationToken)
     {
         var isExistService = await _serviceRepository.AnyAsync(s => s.Name == request.Name);
 
@@ -35,7 +36,12 @@ internal sealed class CreateServiceHandler : IRequestHandler<CreateServiceComman
         await _serviceRepository.AddAsync(service);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        
-        return service.Id;
+
+        var result = new CreateServiceCommandResponse()
+        {
+            ServiceId = service.Id
+        };
+
+        return Result<CreateServiceCommandResponse>.Succeed(result);
     }
 }

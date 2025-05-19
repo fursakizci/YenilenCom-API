@@ -1,9 +1,10 @@
 using FluentValidation;
 using MediatR;
+using TS.Result;
 
 namespace Yenilen.Application.Features.Users.Commands;
 
-public sealed class CreateUserCommand:IRequest<int>
+public sealed class CreateUserCommand:IRequest<Result<CreateUserCommandResponse>>
 {
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; }= string.Empty;
@@ -11,6 +12,11 @@ public sealed class CreateUserCommand:IRequest<int>
     public string Email { get; set; }= string.Empty;
     public DateTime DateOfBirth { get; set; }
     public string Gender { get; set; }= string.Empty;
+}
+
+public sealed class CreateUserCommandResponse
+{
+    public int UserId { get; set; }
 }
 
 public sealed class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>

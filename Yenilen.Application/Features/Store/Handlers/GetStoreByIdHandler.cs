@@ -1,12 +1,13 @@
 using AutoMapper;
 using MediatR;
+using TS.Result;
 using Yenilen.Application.DTOs;
 using Yenilen.Application.Features.Store.Queries;
 using Yenilen.Application.Interfaces;
 
 namespace Yenilen.Application.Features.Store.Handlers;
 
-internal sealed class GetStoreByIdHandler:IRequestHandler<GetStoreByIdQuery,StoreIndividualDto>
+internal sealed class GetStoreByIdHandler:IRequestHandler<GetStoreByIdQuery,Result<GetStoreByIdQueryResponse>>
 {
     private readonly IStoreRepository _storeRepository;
     private readonly IReviewRepository _reviewRepository;
@@ -19,13 +20,13 @@ internal sealed class GetStoreByIdHandler:IRequestHandler<GetStoreByIdQuery,Stor
         _reviewRepository = reviewRepository;
     }
     
-    public async Task<StoreIndividualDto> Handle(GetStoreByIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<GetStoreByIdQueryResponse>> Handle(GetStoreByIdQuery request, CancellationToken cancellationToken)
     {
         var store = await _storeRepository.GetStoreWithDetailsAsync(request.StoreId);
         var storeRating = await _reviewRepository.GetStoreRatingByStoreId(request.StoreId);
         // var resume = _mapper.Map<StoreIndividualDto>(store);
         // resume.Rating = storeRating;
-        var resume = new StoreIndividualDto
+        var resume = new GetStoreByIdQueryResponse
         {
             Name = store.StoreName,
             Address = new AddressDto
@@ -72,6 +73,6 @@ internal sealed class GetStoreByIdHandler:IRequestHandler<GetStoreByIdQuery,Stor
             About = store.About,
             Rating = storeRating
         };
-        return resume;
+        return Result<GetStoreByIdQueryResponse>.Succeed(resume);
     }
 }

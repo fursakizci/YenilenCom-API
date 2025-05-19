@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using TS.Result;
 using Yenilen.Application.DTOs;
 using Yenilen.Application.Features.StaffMember.Queries;
 using Yenilen.Application.Interfaces;
@@ -7,7 +8,7 @@ using Yenilen.Domain.Common.Enums;
 
 namespace Yenilen.Application.Features.StaffMember.Handlers;
 
-internal sealed class GetStaffAppointmentsByStaffIdHandler:IRequestHandler<GetStaffAppointmentsByStaffIdQuery,List<AppointmentDto>>
+internal sealed class GetStaffAppointmentsByStaffIdHandler:IRequestHandler<GetStaffAppointmentsByStaffIdQuery,Result<List<GetStaffAppointmentsByStaffIdQueryResponse>>>
 {
     private readonly IStaffRepository _staffRepository;
     private readonly IAppointmentRepository _appointmentRepository;
@@ -18,7 +19,7 @@ internal sealed class GetStaffAppointmentsByStaffIdHandler:IRequestHandler<GetSt
         _appointmentRepository = appointmentRepository;
     }
     
-    public async Task<List<AppointmentDto>> Handle(GetStaffAppointmentsByStaffIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<List<GetStaffAppointmentsByStaffIdQueryResponse>>> Handle(GetStaffAppointmentsByStaffIdQuery request, CancellationToken cancellationToken)
     {
         var user = await _staffRepository.GetByIdAsync(request.StaffId);
     
@@ -30,11 +31,11 @@ internal sealed class GetStaffAppointmentsByStaffIdHandler:IRequestHandler<GetSt
         var appointments =
             await _appointmentRepository.Where(a => a.StaffId == request.StaffId).ToListAsync();
 
-        var result = new List<AppointmentDto>();
+        var result = new List<GetStaffAppointmentsByStaffIdQueryResponse>();
         
         foreach (var appointment in appointments)
         {
-            var appointmentDto = new AppointmentDto
+            var appointmentDto = new GetStaffAppointmentsByStaffIdQueryResponse
             {
                 UserId =  appointment.StaffId,
                 StartTime = appointment.StartTime,
@@ -43,6 +44,6 @@ internal sealed class GetStaffAppointmentsByStaffIdHandler:IRequestHandler<GetSt
             result.Add(appointmentDto);
         }
 
-        return result;
+        return Result<List<GetStaffAppointmentsByStaffIdQueryResponse>>.Succeed(result);
     }
 }

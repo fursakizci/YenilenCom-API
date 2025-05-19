@@ -1,13 +1,18 @@
 using FluentValidation;
 using MediatR;
+using TS.Result;
 
 namespace Yenilen.Application.Features.Tag.Commands;
 
-public sealed class CreateTagCommand:IRequest<int>
+public sealed class CreateTagCommand:IRequest<Result<CreateTagCommandResponse>>
 {
-    //public int Id { get; set; }
     public string Name { get; set; }
     public string ImageUrl { get; set; }
+}
+
+public sealed class CreateTagCommandResponse
+{
+    public int tagId { get; set; }
 }
 
 public sealed class CreateTagCommandValidator : AbstractValidator<CreateTagCommand>
