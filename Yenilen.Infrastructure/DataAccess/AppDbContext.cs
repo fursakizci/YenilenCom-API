@@ -12,7 +12,7 @@ using Yenilen.Domain.Users;
 
 namespace Yenilen.Infrastructure.DataAccess;
 
-internal sealed class AppDbContext:IdentityDbContext<AppUser,IdentityRole<Guid>,Guid>, IUnitOfWork
+internal sealed class AppDbContext:IdentityDbContext<AppUser,AppRole,Guid>, IUnitOfWork
 {
     private IDbContextTransaction? _currentTransaction;
     private readonly IRequestContextService _requestContextService;
