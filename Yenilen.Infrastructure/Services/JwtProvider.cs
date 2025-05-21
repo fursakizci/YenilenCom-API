@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Yenilen.Application.Services;
@@ -11,19 +12,21 @@ using Yenilen.Infrastructure.Options;
 
 namespace Yenilen.Infrastructure.Services;
 
-internal sealed class JwtProvider(IOptions<JwtOptions> options,  IHttpContextAccessor httpContextAccessor) : IJwtProvider
+internal sealed class JwtProvider(IOptions<JwtOptions> options, IHttpContextAccessor httpContextAccessor) : IJwtProvider
 {
     public Task<string> CreateTokenAsync(AppUser user, CancellationToken cancellationToken = default)
     {
         List<Claim> claims = new()
         {
-            new Claim("user-id", user.Id.ToString())
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim("user-id", user.Id.ToString()),
+            new Claim("role",user.Role.Name!)
         };
-
+        
         var expires = options.Value.ExpirationTimeInHour;
         
         SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(options.Value.SecretKey));
-        SigningCredentials signingCredentials = new(securityKey, SecurityAlgorithms.HmacSha512);
+        SigningCredentials signingCredentials = new(securityKey, SecurityAlgorithms.HmacSha256);
         
         JwtSecurityToken securityToken = new(
             issuer: options.Value.Issuer,

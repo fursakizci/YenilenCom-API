@@ -12,6 +12,7 @@ public interface IGenericRepository<TEntity> where TEntity : class
     IQueryable<TEntity> GetAll();
     IQueryable<TEntity> GetAllWithTracking();
     Task AddAsync(TEntity entity);
+    Task AddAsync(TEntity entity, CancellationToken cancellationToken);
     Task AddRangeAsync(ICollection<TEntity> entities, CancellationToken cancellationToken = default);
     void Update(TEntity entity);
     Task DeleteAsync(Guid id);

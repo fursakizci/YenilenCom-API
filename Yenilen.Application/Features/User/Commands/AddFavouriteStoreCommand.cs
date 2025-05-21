@@ -6,9 +6,7 @@ namespace Yenilen.Application.Features.User.Commands;
 
 public sealed class AddFavouriteStoreCommand:IRequest<Result<AddFavouriteStoreCommandResponse>>
 {
-    public int UserId { get; set; }
     public int StoreId { get; set; }
-    
 }
 
 public sealed class AddFavouriteStoreCommandResponse

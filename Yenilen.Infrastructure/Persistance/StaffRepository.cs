@@ -21,4 +21,9 @@ internal sealed class StaffRepository:GenericRepository<Staff, AppDbContext>,ISt
             .Include(i=>i.Image)
             .ToListAsync();
     }
+
+    public async Task<bool> StaffExistsByPhoneNumberAsync(string phoneNumber = "", string email = "")
+    {
+        return await _dbSet.AnyAsync(i => i.Email == email || i.PhoneNumber == phoneNumber);
+    }
 }

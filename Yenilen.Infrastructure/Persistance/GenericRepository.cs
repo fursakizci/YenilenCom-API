@@ -59,6 +59,11 @@ public class GenericRepository<TEntity, TContext>:IGenericRepository<TEntity>
         await _dbSet.AddAsync(entity);
     }
 
+    public async Task AddAsync(TEntity entity, CancellationToken cancellationToken)
+    {
+        await _dbSet.AddAsync(entity, cancellationToken);
+    }
+
     public async Task AddRangeAsync(ICollection<TEntity> entities, CancellationToken cancellationToken = default)
     {
         await _dbSet.AddRangeAsync(entities, cancellationToken);

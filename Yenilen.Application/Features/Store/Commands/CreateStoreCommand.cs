@@ -5,7 +5,7 @@ using Yenilen.Application.DTOs;
 
 namespace Yenilen.Application.Features.Store.Commands;
 
-public class CreateStoreCommand:IRequest<Result<CrateStoreCommandResponse>>
+public class CreateStoreCommand:IRequest<Result<CreateStoreCommandResponse>>
 {
     public string Name { get; set; } = string.Empty;
     //public string WebsiteUrl { get; set; } = string.Empty;
@@ -19,14 +19,14 @@ public class CreateStoreCommand:IRequest<Result<CrateStoreCommandResponse>>
     public List<StoreWorkingHourDto> StoreWorkingHours { get; set; } = new();
 }
 
-public sealed class CrateStoreCommandResponse
+public sealed class CreateStoreCommandResponse
 {
     public int StoreId { get; set; }
 }
 
-public sealed class CrateStoreCommandValidator : AbstractValidator<CreateStoreCommand>
+public sealed class UpdateStoreCommandValidator : AbstractValidator<CreateStoreCommand>
 {
-    public CrateStoreCommandValidator()
+    public UpdateStoreCommandValidator()
     {
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Mağaza adı boş olamaz.")

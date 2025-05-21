@@ -8,20 +8,20 @@ namespace Yenilen.Application.Features.User.Handlers;
 
 public class GetAllFavouritesByUserIdHandler:IRequestHandler<GetAllFavouritesByUserIdQuery,Result<List<GetAllFavouritesByUserIdQueryResponse>>>
 {
-    private readonly IUserRepository _userRepository;
+    private readonly ICustomerRepository _customerRepository;
     private readonly IReviewRepository _reviewRepository;
     private readonly IStoreRepository _storeRepository;
 
-    public GetAllFavouritesByUserIdHandler(IUserRepository userRepository, IReviewRepository reviewRepository, IStoreRepository storeRepository)
+    public GetAllFavouritesByUserIdHandler(ICustomerRepository customerRepository, IReviewRepository reviewRepository, IStoreRepository storeRepository)
     {
-        _userRepository = userRepository;
+        _customerRepository = customerRepository;
         _reviewRepository = reviewRepository;
         _storeRepository = storeRepository;
     }
     
     public async Task<Result<List<GetAllFavouritesByUserIdQueryResponse>>> Handle(GetAllFavouritesByUserIdQuery request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetFavouriteByIdAsync(request.UserId);
+        var user = await _customerRepository.GetFavouriteByIdAsync(request.UserId);
         
         if (user == null)
             return new List<GetAllFavouritesByUserIdQueryResponse>();

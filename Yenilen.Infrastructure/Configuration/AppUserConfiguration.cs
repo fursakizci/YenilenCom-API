@@ -9,6 +9,12 @@ internal sealed class AppUserConfiguration: IEntityTypeConfiguration<AppUser>
 {
     public void Configure(EntityTypeBuilder<AppUser> builder)
     {
+
+        builder.HasOne(u => u.Role)
+            .WithMany()
+            .HasForeignKey(u => u.RoleId)
+            .OnDelete(DeleteBehavior.Restrict);
+        
         builder.Property(u => u.FirstName)
             .IsRequired()
             .HasMaxLength(100);

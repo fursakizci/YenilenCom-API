@@ -5,7 +5,7 @@ namespace Yenilen.Domain.Entities;
 public class Review:BaseEntity
 {
     public int AuthorId { get; set; }
-    public User Author { get; set; }
+    public Customer Author { get; set; }
     public string Text { get; set; }
     public decimal Rating { get; set; }
     public int StoreId { get; set; }

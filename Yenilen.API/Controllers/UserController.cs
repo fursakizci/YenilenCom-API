@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Yenilen.API.Auth;
 using Yenilen.Application.Features.Booking.Queries;
 using Yenilen.Application.Features.User.Queries;
 using Yenilen.Application.Features.User.Queries;
@@ -51,8 +52,15 @@ public class UserController:ControllerBase
         return Ok(appointments);
     }
 
-    [HttpPost("create")]
-    public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand command)
+    // [HttpPost("create")]
+    // public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand command)
+    // {
+    //     var result = await _mediator.Send(command);
+    //     return Ok(result);
+    // }
+
+    [HttpPut("update")]
+    public async Task<IActionResult> UpdateUser([FromBody] UpdateCustomerCommand command)
     {
         var result = await _mediator.Send(command);
         return Ok(result);

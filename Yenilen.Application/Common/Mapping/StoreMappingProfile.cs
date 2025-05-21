@@ -17,7 +17,6 @@ public class StoreMappingProfile:Profile
             .ForMember(s => s.Categories, opt => opt.MapFrom(src => src.Categories))
             .ForMember(s => s.StaffMembers, opt => opt.MapFrom(src => src.StaffMembers))
             .ForMember(s => s.About, opt => opt.MapFrom(src => src.About));
-
     }
     
 }

@@ -13,20 +13,19 @@ internal sealed class AddUserAddressHandler : IRequestHandler<AddUserAddressComm
 {
 
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IUserRepository _userRepository;
+    private readonly ICustomerRepository _customerRepository;
     private readonly IAddressRepository _addressRepository;
     private readonly IRequestContextService _requestContextService;
     private readonly IMapper _mapper;
 
     public AddUserAddressHandler(IUnitOfWork unitOfWork, 
-        IUserRepository userRepository,
+        ICustomerRepository customerRepository,
         IAddressRepository addressRepository, 
-        IHttpContextAccessor httpContextAccessor,
         IRequestContextService requestContextService,
         IMapper mapper)
     {
         _unitOfWork = unitOfWork;
-        _userRepository = userRepository;
+        _customerRepository = customerRepository;
         _addressRepository = addressRepository;
         _requestContextService = requestContextService;
         _mapper = mapper;
@@ -34,20 +33,27 @@ internal sealed class AddUserAddressHandler : IRequestHandler<AddUserAddressComm
     
     public async Task<Result<AddUserAddressCommandResponse>> Handle(AddUserAddressCommand request, CancellationToken cancellationToken)
     {
-        var userId = _requestContextService.GetCurrentUserId();
+        var appUserId = _requestContextService.GetCurrentUserId();
 
-        var user = await _userRepository.GetUserByGuid(userId);
-        
+        if (appUserId is null)
+        {
+            return Result<AddUserAddressCommandResponse>.Failure("Kullanici id bilgisine ulasilamadi.");
+        }
+
+        var user = await _customerRepository.GetCustomerByGuid(appUserId);
+
         if (user == null)
-            throw new Exception("User not found");
-
+        {
+            return Result<AddUserAddressCommandResponse>.Failure("Kullanici bulunamadi.");
+        }
+        
         var newAddress = _mapper.Map<Domain.Entities.Address>(request);
 
         await _addressRepository.AddAsync(newAddress);
         
         user.Addresses.Add(newAddress);
         
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await _unitOfWork.SaveChangesAsync(appUserId, cancellationToken);
 
         var response = new AddUserAddressCommandResponse()
         {

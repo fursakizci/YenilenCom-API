@@ -9,13 +9,13 @@ namespace Yenilen.Application.Features.User.Handlers;
 
 public class GetProfileByIdHandler : IRequestHandler<GetProfileByIdQuery, Result<GetProfileByIdQueryResponse>>
 {
-    private readonly IUserRepository _userRepository;
+    private readonly ICustomerRepository _customerRepository;
     private readonly IRequestContextService _requestContextService;
 
-    public GetProfileByIdHandler(IUserRepository userRepository,
+    public GetProfileByIdHandler(ICustomerRepository customerRepository,
         IRequestContextService requestContextService)
     {
-        _userRepository = userRepository;
+        _customerRepository = customerRepository;
         _requestContextService = requestContextService;
     }
 
@@ -28,7 +28,7 @@ public class GetProfileByIdHandler : IRequestHandler<GetProfileByIdQuery, Result
             return Result<GetProfileByIdQueryResponse>.Failure("Kullanıcı bilgisi alınamadı");
         }
         
-        var user = await _userRepository.GetByIdAsync(appUserId, true);
+        var user = await _customerRepository.GetByIdAsync(appUserId, true);
 
         if (user is null)
         {

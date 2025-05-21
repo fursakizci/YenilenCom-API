@@ -8,6 +8,11 @@ internal sealed class StaffConfiguration : IEntityTypeConfiguration<Staff>
 {
     public void Configure(EntityTypeBuilder<Staff> builder)
     {
+        builder.HasOne(so => so.AppUser)
+            .WithOne()
+            .HasForeignKey<Staff>(so => so.AppUserId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
         builder.Property(s => s.Name)
             .IsRequired()
             .HasMaxLength(100);

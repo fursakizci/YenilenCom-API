@@ -1,12 +1,11 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+
 using TS.Result;
 using Yenilen.Application.Auth.Commands;
 using Yenilen.Application.Interfaces;
 using Yenilen.Application.Services;
 using Yenilen.Application.Services.Auth;
-using Yenilen.Domain.Entities;
 using Yenilen.Domain.Users;
 
 namespace Yenilen.Application.Auth.Handlers;
@@ -15,6 +14,7 @@ internal sealed class LoginHandler:IRequestHandler<LoginCommand,Result<LoginComm
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly SignInManager<AppUser> _signInManager;
+    private readonly IAppUserRepository _appUserRepository;
     private readonly IRefreshTokenRepository _refreshTokenRepository;
     private readonly IJwtProvider _jwtProvider;
     private readonly ITokenService _tokenService;
@@ -22,6 +22,7 @@ internal sealed class LoginHandler:IRequestHandler<LoginCommand,Result<LoginComm
 
     public LoginHandler(UserManager<AppUser> userManager
     ,SignInManager<AppUser> signInManager,
+    IAppUserRepository appUserRepository,
     IRefreshTokenRepository refreshTokenRepository,
     IJwtProvider jwtProvider,
     ITokenService tokenService,
@@ -30,6 +31,7 @@ internal sealed class LoginHandler:IRequestHandler<LoginCommand,Result<LoginComm
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _appUserRepository = appUserRepository;
         _refreshTokenRepository = refreshTokenRepository;
         _jwtProvider = jwtProvider;
         _tokenService = tokenService;
@@ -38,11 +40,13 @@ internal sealed class LoginHandler:IRequestHandler<LoginCommand,Result<LoginComm
     
     public async Task<Result<LoginCommandResponse>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        AppUser? appUser = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == request.Email, cancellationToken);
+        //AppUser? appUser = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == request.Email, cancellationToken);
 
+        var appUser = await _userManager.FindByEmailAsync(request.Email);
+        
         if (appUser is null)
         {
-            return Result<LoginCommandResponse>.Failure("Kullanici bulunamadi.");
+            return Result<LoginCommandResponse>.Failure("eçersiz email veya şifre.");
         }
 
         SignInResult signInResult = await _signInManager.CheckPasswordSignInAsync(appUser, request.Password, true);
@@ -66,6 +70,13 @@ internal sealed class LoginHandler:IRequestHandler<LoginCommand,Result<LoginComm
         {
             return (500, "Şifreniz yanlış");
         }
+        
+        var userRole = await _appUserRepository.GetUserByEmailAsync(request.Email);
+
+        if (userRole is null)
+        {
+            return Result<LoginCommandResponse>.Failure("Kullanıcıya atanmış bir rol bulunamadı.");
+        }
 
         var (accessToken, refreshToken) = await _tokenService.GenerateTokensAsync(appUser);
         
@@ -81,6 +92,6 @@ internal sealed class LoginHandler:IRequestHandler<LoginCommand,Result<LoginComm
         _jwtProvider.WriteAuthTokenAsHttpOnlyCookie("ACCESS_TOKEN", accessToken);
         _jwtProvider.WriteAuthTokenAsHttpOnlyCookie("REFRESH_TOKEN", refreshToken.Token);
 
-        return response;
+        return Result<LoginCommandResponse>.Succeed(response);
     }
 }
