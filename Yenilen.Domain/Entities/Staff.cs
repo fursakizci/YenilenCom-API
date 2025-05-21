@@ -1,9 +1,14 @@
 using Yenilen.Domain.Common;
+using Yenilen.Domain.Users;
 
 namespace Yenilen.Domain.Entities;
 
 public class Staff:BaseEntity
 {
+    public Guid AppUserId { get; set; }
+    public AppUser AppUser { get; set; } = default!;
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
     public int StoreId { get; set; }
     public Store Store { get; set; }
     public string Name { get; set; }

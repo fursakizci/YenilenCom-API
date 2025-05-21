@@ -17,10 +17,10 @@ internal sealed class GetUserAppointmentsByUserIdHandler:IRequestHandler<GetUser
     
     public Task<Result<IQueryable<GetUserAppointmentsByUserIdQueryResponse>>> Handle(GetUserAppointmentsByUserIdQuery request, CancellationToken cancellationToken)
     {
-        var userAppointments = _appointmentRepository.Where(a => a.UserId == request.UserId)
+        var userAppointments = _appointmentRepository.Where(a => a.CustomerId == request.UserId)
             .Select(a => new GetUserAppointmentsByUserIdQueryResponse
             {
-                UserId = a.UserId,
+                UserId = a.CustomerId,
                 StartTime = a.StartTime,
                 Duration = (int)a.Duration.TotalMinutes,
                 Note = a.Note ?? string.Empty

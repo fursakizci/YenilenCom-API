@@ -8,9 +8,9 @@ internal sealed class AppointmentConfiguration : IEntityTypeConfiguration<Appoin
 {
     public void Configure(EntityTypeBuilder<Appointment> builder)
     {
-        builder.HasOne(a => a.User)
+        builder.HasOne(a => a.Customer)
             .WithMany()
-            .HasForeignKey(a => a.UserId);
+            .HasForeignKey(a => a.CustomerId);
 
         builder.HasOne(a => a.Store)
             .WithMany()

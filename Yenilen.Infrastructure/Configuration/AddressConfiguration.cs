@@ -10,9 +10,9 @@ internal sealed class AddressConfiguration : IEntityTypeConfiguration<Address>
     {
         builder.ToTable("Addresses");
         
-        builder.HasOne(a => a.User)
+        builder.HasOne(a => a.Customer)
             .WithMany(u => u.Addresses)
-            .HasForeignKey(a => a.UserId)
+            .HasForeignKey(a => a.CustomerId)
             .OnDelete(DeleteBehavior.Restrict);
 
         // builder.HasOne(a => a.Store)
@@ -23,7 +23,7 @@ internal sealed class AddressConfiguration : IEntityTypeConfiguration<Address>
         // builder.Property(a => a.StoreId)
         //     .IsRequired(false);
 
-        builder.Property(a => a.UserId)
+        builder.Property(a => a.CustomerId)
             .IsRequired(false);
     }
 }

@@ -10,7 +10,7 @@ public class AppointmentMappingProfile:Profile
     public AppointmentMappingProfile()
     {
         CreateMap<CreateAppointmentCommand, Appointment>()
-            .ForMember(a => a.UserId, opt => opt.MapFrom(src => src.UserId))
+            .ForMember(a => a.CustomerId, opt => opt.MapFrom(src => src.UserId))
             .ForMember(a => a.StoreId, opt => opt.MapFrom(src => src.StoreId))
             .ForMember(a => a.StaffId, opt => opt.MapFrom(src => src.StaffId))
             //.ForMember(a => a.StartTime, opt => opt.MapFrom(src => src.AppointmentDate))

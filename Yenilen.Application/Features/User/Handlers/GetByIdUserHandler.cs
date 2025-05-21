@@ -8,16 +8,16 @@ namespace Yenilen.Application.Features.User.Handlers;
 
 internal sealed class GetByIdUserHandler: IRequestHandler<GetByIdUserQuery,Result<GetByIdUserQueryResponse>>
 {
-    private readonly IUserRepository _userRepository;
+    private readonly ICustomerRepository _customerRepository;
 
-    public GetByIdUserHandler(IUserRepository userRepository)
+    public GetByIdUserHandler(ICustomerRepository customerRepository)
     {
-        _userRepository = userRepository;
+        _customerRepository = customerRepository;
     }
     
     public async Task<Result<GetByIdUserQueryResponse>> Handle(GetByIdUserQuery request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByIdAsync(request.UserId);
+        var user = await _customerRepository.GetByIdAsync(request.UserId);
 
         if (user == null) return null;
 

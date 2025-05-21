@@ -16,12 +16,13 @@ internal sealed class AppDbContext:IdentityDbContext<AppUser,AppRole,Guid>, IUni
 {
     private IDbContextTransaction? _currentTransaction;
     private readonly IRequestContextService _requestContextService;
+    
     public AppDbContext(DbContextOptions<AppDbContext> options,IRequestContextService requestContextService):base(options)
     {
         _requestContextService = requestContextService;
     }
     
-    public DbSet<User> Users { get; set; }
+    public DbSet<Customer> Customers { get; set; }
     public DbSet<Store> Stores { get; set; }
     public DbSet<Address> Addresses { get; set; }
     public DbSet<Appointment> Appointments { get; set; }
@@ -33,11 +34,22 @@ internal sealed class AppDbContext:IdentityDbContext<AppUser,AppRole,Guid>, IUni
     public DbSet<Tag> Tags { get; set; }
     public DbSet<Image> Images { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
+    public DbSet<StoreOwner> StoreOwners { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<AppUser>().ToTable("Users");
+        modelBuilder.Entity<AppRole>().ToTable("Roles");
+        
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Ignore<IdentityUserLogin<Guid>>();
+        modelBuilder.Ignore<IdentityUserToken<Guid>>();
+        modelBuilder.Ignore<IdentityUserClaim<Guid>>();
+        modelBuilder.Ignore<IdentityRoleClaim<Guid>>();
+        modelBuilder.Ignore<IdentityUserRole<Guid>>();
+        modelBuilder.Ignore<IdentityUserRole<Guid>>();
     }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
@@ -54,7 +66,7 @@ internal sealed class AppDbContext:IdentityDbContext<AppUser,AppRole,Guid>, IUni
         return base.SaveChangesAsync(cancellationToken);
     }
 
-    public Task<int> SaveChangesAsync(Guid appUserId ,CancellationToken cancellationToken = default)
+    public Task<int> SaveChangesAsync(Guid? appUserId ,CancellationToken cancellationToken = default)
     {
         //HttpContextAccessor httpContextAccessor = new();
         //var userId = _currentUserService.UserId;
@@ -65,7 +77,11 @@ internal sealed class AppDbContext:IdentityDbContext<AppUser,AppRole,Guid>, IUni
             //     .FirstOrDefault(p => p.Type == "user-id")
             //     .Value;
             
-        ApplyAuditInformation(appUserId);
+            if (appUserId != null)
+            {
+                ApplyAuditInformation(appUserId);   
+            }
+        
     
         return base.SaveChangesAsync(cancellationToken);
     }

@@ -1,9 +1,14 @@
 using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.RateLimiting;
+using Yenilen.API.Auth;
 using Yenilen.API.Middlewares;
 using Yenilen.Application.Common.Mapping;
 using Yenilen.Infrastructure;
 using Yenilen.Application;
+using Yenilen.Domain.Users;
+using Yenilen.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +32,6 @@ builder.Services.AddCors(options =>
 
 // Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
-
 
 //builder.Services.AddSwaggerGen();
 
@@ -62,10 +66,17 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.AddAuthorization(options =>
+{
+    // Add the custom policies
+    options.AddYenilenPolicies();
+});
+// Register authorization handler
+builder.Services.AddSingleton<IAuthorizationHandler, StoreAccessHandler>();
 
 
 
-builder.Services.AddAutoMapper(typeof(UserMappingProfile)); // added AutoMapper service
+builder.Services.AddAutoMapper(typeof(CustomerMappingProfile)); // added AutoMapper service
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddControllers();
 
@@ -85,6 +96,13 @@ builder.Services.AddRateLimiter(x =>
 
 
 var app = builder.Build();
+
+//Seed class program ilk calistigin rolleri atamak icin db ye.
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<AppRole>>();
+    await IdentitySeeder.SeedRolesAsync(roleManager);
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -108,7 +126,6 @@ app.UseGlobalExceptionHandling();
 app.MapControllers().RequireRateLimiting("fixed");
 
 //ExtensionsMiddleware.CreateFirstUser(app);
-
 
 app.Run();
 

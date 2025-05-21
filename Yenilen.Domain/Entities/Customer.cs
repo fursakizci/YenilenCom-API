@@ -4,7 +4,7 @@ using Yenilen.Domain.Users;
 
 namespace Yenilen.Domain.Entities;
 
-public class User:BaseEntity
+public class Customer:BaseEntity
 {
     public Guid AppUserId { get; set; }
     public AppUser AppUser { get; set; } = default!;

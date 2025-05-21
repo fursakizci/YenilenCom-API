@@ -11,28 +11,27 @@ namespace Yenilen.Application.Features.User.Handlers;
 
 internal sealed class CreateUserHandler:IRequestHandler<CreateUserCommand, Result<CreateUserCommandResponse>>
 {
-
-    private readonly IUserRepository _userRepository;
+    private readonly ICustomerRepository _customerRepository;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
 
-    public CreateUserHandler(IUnitOfWork unitOfWork,IUserRepository userRepository, IMapper mapper)
+    public CreateUserHandler(IUnitOfWork unitOfWork,ICustomerRepository customerRepository, IMapper mapper)
     {
-        _userRepository = userRepository;
+        _customerRepository = customerRepository;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
     }
     
     public async Task<Result<CreateUserCommandResponse>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
-        var isUserExists = await _userRepository.IsExistsAsync(request.PhoneNumber, request.Email);
+        var isUserExists = await _customerRepository.CustomerExistsByPhoneNumberAsync(request.PhoneNumber, request.Email);
         
         if(isUserExists)
             throw new InvalidOperationException("Girdiğiniz kullanıcıya ait telefon numarası ya da email sistemde kayıtlıdır.");
         
-        var user = _mapper.Map<Domain.Entities.User>(request);
+        var user = _mapper.Map<Domain.Entities.Customer>(request);
 
-        await _userRepository.AddAsync(user);
+        await _customerRepository.AddAsync(user);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

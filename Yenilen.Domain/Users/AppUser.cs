@@ -12,7 +12,8 @@ public sealed class AppUser : IdentityUser<Guid>
         IsDeleted = false;
         CreatedAt = DateTime.UtcNow;
     }
-
+    public Guid RoleId { get; set; }
+    public AppRole Role { get; set; } = default!;
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string FullName => $"{FirstName} {LastName}";

@@ -50,4 +50,17 @@ internal sealed class StoreRepository:GenericRepository<Store, AppDbContext>,ISt
 
         return store;
     }
+
+    public async Task<Store?> GetStoreByUserIdAsync(Guid? appUserId)
+    {
+        return await _dbSet.Include(s => s.StoreOwner).FirstOrDefaultAsync(s => s.StoreOwner.AppUserId == appUserId);
+    }
+
+    public async Task<Store?> GetStoreWithCategoriesByUserId(Guid? appUserId, CancellationToken cancellationToken)
+    {
+        var store = await _dbSet.Include(s => s.Categories)
+            .FirstOrDefaultAsync(s => s.StoreOwner.AppUserId == appUserId, cancellationToken);
+
+        return store;
+    }
 }

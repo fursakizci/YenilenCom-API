@@ -8,9 +8,9 @@ internal sealed class FavouriteConfiguration: IEntityTypeConfiguration<Favourite
 {
     public void Configure(EntityTypeBuilder<Favourite> builder)
     {
-        builder.HasOne(f => f.User)
+        builder.HasOne(f => f.Customer)
             .WithMany(f =>f.Favourites)
-            .HasForeignKey(f => f.UserId);
+            .HasForeignKey(f => f.CustomerId);
 
         builder.HasOne(f => f.Store)
             .WithOne()

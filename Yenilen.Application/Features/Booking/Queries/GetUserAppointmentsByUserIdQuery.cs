@@ -9,8 +9,6 @@ public sealed class GetUserAppointmentsByUserIdQuery:IRequest<Result<IQueryable<
     public int UserId { get; set; }
 }
 
-
-
 public sealed class GetUserAppointmentsByUserIdQueryResponse
 {
     public int? UserId { get; set; }

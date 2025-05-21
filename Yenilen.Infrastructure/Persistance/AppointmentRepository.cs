@@ -82,4 +82,5 @@ internal sealed class AppointmentRepository:GenericRepository<Appointment,AppDbC
 
         return result;
     }
+    
 }

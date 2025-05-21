@@ -11,11 +11,9 @@ internal sealed class StoreConfiguration : IEntityTypeConfiguration<Store>
         builder.ToTable("Stores");
 
         builder.Property(s => s.StoreName)
-            .IsRequired()
             .HasMaxLength(100);
         
         builder.Property(s => s.ManagerName)
-            .IsRequired()
             .HasMaxLength(100);
         
         builder.Property(s => s.ManagerPhone)

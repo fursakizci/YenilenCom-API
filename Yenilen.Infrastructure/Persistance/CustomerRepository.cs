@@ -7,25 +7,25 @@ using Yenilen.Infrastructure.DataAccess;
 
 namespace Yenilen.Infrastructure.Persistance;
 
-internal sealed class UserRepository : GenericRepository<User, AppDbContext>, IUserRepository
+internal sealed class CustomerRepository : GenericRepository<Customer, AppDbContext>, ICustomerRepository
 {
     private readonly AppDbContext _context;
-    private readonly DbSet<User> _dbSet;
+    private readonly DbSet<Customer> _dbSet;
     private readonly UserManager<AppUser> _userManager;
 
-    public UserRepository(AppDbContext context, UserManager<AppUser> userManager) : base(context)
+    public CustomerRepository(AppDbContext context, UserManager<AppUser> userManager) : base(context)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
-        _dbSet = _context.Set<User>();
+        _dbSet = _context.Set<Customer>();
         _userManager = userManager;
     }
 
-    public async Task<bool> IsExistsAsync(string phoneNumber, string email)
+    public async Task<bool> CustomerExistsByPhoneNumberAsync(string phoneNumber, string email = "")
     {
         return await _dbSet.AnyAsync(i => i.Email == email || i.PhoneNumber == phoneNumber);
     }
 
-    public async Task<User?> GetByIdAsync(Guid? userId, bool includeRelated = false)
+    public async Task<Customer?> GetByIdAsync(Guid? userId, bool includeRelated = false)
     {
         if (!includeRelated)
         {
@@ -33,7 +33,7 @@ internal sealed class UserRepository : GenericRepository<User, AppDbContext>, IU
         }
         
         if (userId == Guid.Empty || userId is null)
-            return new User();
+            return new Customer();
         
         return await _dbSet
             .Include(u => u.Addresses)
@@ -41,18 +41,13 @@ internal sealed class UserRepository : GenericRepository<User, AppDbContext>, IU
             .FirstOrDefaultAsync(u => u.AppUserId == userId);
     }
 
-    public async Task<User?> GetFavouriteByIdAsync(int id)
+    public async Task<Customer?> GetFavouriteByIdAsync(int id)
     {
         return await _dbSet.Include(u => u.Favourites)
             .FirstOrDefaultAsync(u => u.Id == id);
     }
 
-    public async Task AddUserAsync(User user, CancellationToken cancellationToken)
-    {
-        await _context.Users.AddAsync(user, cancellationToken);
-    }
-
-    public async Task<User?> GetUserByGuid(Guid? userId)
+    public async Task<Customer?> GetCustomerByGuid(Guid? userId)
     {
         return await _dbSet.Where(u => u.AppUserId == userId).FirstOrDefaultAsync();
     }

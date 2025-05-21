@@ -9,7 +9,6 @@ public sealed class GetStaffAppointmentsByStaffIdQuery:IRequest<Result<List<GetS
     public int StaffId { get; set; }
 }
 
-
 public sealed class GetStaffAppointmentsByStaffIdQueryResponse
 {
     public int? UserId { get; set; }

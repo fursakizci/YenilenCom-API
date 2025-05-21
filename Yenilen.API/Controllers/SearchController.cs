@@ -31,12 +31,12 @@ public class SearchController:ControllerBase
         return Ok(result);
     }
 
-    [HttpPost("create-tag")]
-    public async Task<IActionResult> CreateTag([FromBody] CreateTagCommand command)
-    {
-        var result = await _mediator.Send(command);
-        return Ok(result);
-    }
+    // [HttpPost("create-tag")]
+    // public async Task<IActionResult> CreateTag([FromBody] CreateTagCommand command)
+    // {
+    //     var result = await _mediator.Send(command);
+    //     return Ok(result);
+    // }
 
     [HttpGet("searchBar")]
     public async Task<IActionResult> GetStoresFromSearchBar([FromQuery] GetStoresFromSearchBarQuery query)

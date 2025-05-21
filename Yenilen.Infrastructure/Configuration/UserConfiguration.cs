@@ -4,9 +4,9 @@ using Yenilen.Domain.Entities;
 
 namespace Yenilen.Infrastructure.Configuration;
 
-internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
+internal sealed class UserConfiguration : IEntityTypeConfiguration<Customer>
 {
-    public void Configure(EntityTypeBuilder<User> builder)
+    public void Configure(EntityTypeBuilder<Customer> builder)
     {
         builder.HasOne(u => u.AppUser)
             .WithMany()
@@ -44,17 +44,17 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
             .HasForeignKey("UserId");
 
         builder.HasMany(u => u.Favourites)
-            .WithOne(f => f.User)
-            .HasForeignKey(f => f.UserId);
+            .WithOne(f => f.Customer)
+            .HasForeignKey(f => f.CustomerId);
         
         builder.HasMany(u => u.Addresses)
-            .WithOne(a => a.User)
-            .HasForeignKey(a => a.UserId)
+            .WithOne(a => a.Customer)
+            .HasForeignKey(a => a.CustomerId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(u => u.Appointments)
-            .WithOne(a => a.User)
-            .HasForeignKey(a => a.UserId)
+            .WithOne(a => a.Customer)
+            .HasForeignKey(a => a.CustomerId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

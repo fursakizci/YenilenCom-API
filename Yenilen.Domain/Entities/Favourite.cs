@@ -4,8 +4,8 @@ namespace Yenilen.Domain.Entities;
 
 public class Favourite:BaseEntity
 {
-    public int UserId { get; set; }
-    public User User { get; set; }
+    public int CustomerId { get; set; }
+    public Customer Customer { get; set; }
     public int StoreId { get; set; }
     public Store Store { get; set; }
 }

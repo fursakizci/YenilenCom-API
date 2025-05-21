@@ -24,7 +24,13 @@ public class RoleController:ControllerBase
             Name = name
         };
 
-        await _roleManager.CreateAsync(appRole);
+        IdentityResult result = await _roleManager.CreateAsync(appRole);
+
+        if (!result.Succeeded)
+        {
+            return BadRequest(result.Errors.Select(s => s.Description));
+        }
+        
         return NoContent();
     }
 

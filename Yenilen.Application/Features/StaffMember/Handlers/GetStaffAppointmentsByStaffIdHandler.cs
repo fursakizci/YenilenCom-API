@@ -1,29 +1,42 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using TS.Result;
-using Yenilen.Application.DTOs;
 using Yenilen.Application.Features.StaffMember.Queries;
 using Yenilen.Application.Interfaces;
-using Yenilen.Domain.Common.Enums;
+using Yenilen.Application.Services.Common;
 
 namespace Yenilen.Application.Features.StaffMember.Handlers;
 
 internal sealed class GetStaffAppointmentsByStaffIdHandler:IRequestHandler<GetStaffAppointmentsByStaffIdQuery,Result<List<GetStaffAppointmentsByStaffIdQueryResponse>>>
 {
     private readonly IStaffRepository _staffRepository;
+    private readonly IStoreOwnerPolicyService _storeOwnerPolicyService;
     private readonly IAppointmentRepository _appointmentRepository;
 
-    public GetStaffAppointmentsByStaffIdHandler(IStaffRepository staffRepository, IAppointmentRepository appointmentRepository)
+    public GetStaffAppointmentsByStaffIdHandler(IStaffRepository staffRepository,
+        IStoreOwnerPolicyService storeOwnerPolicyService,
+        IAppointmentRepository appointmentRepository)
     {
         _staffRepository = staffRepository;
+        _storeOwnerPolicyService = storeOwnerPolicyService;
         _appointmentRepository = appointmentRepository;
     }
     
     public async Task<Result<List<GetStaffAppointmentsByStaffIdQueryResponse>>> Handle(GetStaffAppointmentsByStaffIdQuery request, CancellationToken cancellationToken)
     {
-        var user = await _staffRepository.GetByIdAsync(request.StaffId);
+        //TODO: Buraya admin calendar entegrasyonunu tamamladiktan sonra tekrar bak.
+        
+        
+        
+        var appUserId = await _storeOwnerPolicyService.ValidateAndGetAppUserIdAsync(cancellationToken);
+
+        if (!appUserId.IsSuccessful)
+        {
+            return Result<List<GetStaffAppointmentsByStaffIdQueryResponse>>.Failure(appUserId.StatusCode, appUserId.ErrorMessages ?? new List<string> { "Kullanıcı ID alınamadı." });
+        }
+        
     
-        if (user == null)
+        if (appUserId == null)
         {
             throw new InvalidOperationException("Girdiginiz calisana ait bilgilere erisilemiyor");
         }

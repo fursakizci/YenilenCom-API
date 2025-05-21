@@ -4,14 +4,20 @@ namespace Yenilen.Domain.Entities;
 
 public class Store:BaseEntity
 {
-    public string StoreName { get; set; }
-    public string ManagerName { get; set; }
-    public string ManagerPhone { get; set; }
-    public int AddressId { get; set; }
+    // StoreOwner ile bire-bir ilişki
+    public int StoreOwnerId { get; set; }
+    public StoreOwner StoreOwner { get; set; }
+    
+    public string? StoreName { get; set; }
+    public string? ManagerName { get; set; }
+    public string? ManagerPhone { get; set; }
+    public int? AddressId { get; set; }
     public Address? Address { get; set; }
     public string? MobileNumber { get; set; }
     public string? PhoneNumber { get; set; }
     public string? About { get; set; }
+
+    public bool IsConfirm { get; set; } = false;
     
     public ICollection<Category> Categories { get; set; } = new List<Category>();
     public ICollection<Review> Reviews { get; set; } = new List<Review>();
