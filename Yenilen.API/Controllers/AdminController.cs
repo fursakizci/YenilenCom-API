@@ -44,7 +44,7 @@ public class AdminController:ControllerBase
         return Ok();
     }
 
-    [HttpPut("update}")]
+    [HttpPut("update")]
     [Authorize(Policy = PolicyNames.RequireStoreOwner)]
     public async Task<IActionResult> UpdateStore()
     {
