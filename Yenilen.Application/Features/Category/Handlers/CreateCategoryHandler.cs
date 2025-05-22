@@ -58,7 +58,9 @@ internal sealed class CreateCategoryHandler:IRequestHandler<CreateCategoryComman
         
             var category = _mapper.Map<Domain.Entities.Category>(request);
 
-            await _categoryRepository.AddAsync(category);
+            category.StoreId = store.Id;
+
+            await _categoryRepository.AddAsync(category, cancellationToken);
             await _unitOfWork.SaveChangesAsync(appUserId, cancellationToken);
             await _unitOfWork.CommitTransactionAsync(cancellationToken);
 

@@ -20,7 +20,6 @@ public class CategoryMappingProfile:Profile
 
         
         CreateMap<CreateCategoryCommand, Category>()
-            .ForMember(c => c.StoreId, opt => opt.MapFrom(src => src.StoreId))
             .ForMember(c => c.Name, opt => opt.MapFrom(src => src.Name));
     }
 }

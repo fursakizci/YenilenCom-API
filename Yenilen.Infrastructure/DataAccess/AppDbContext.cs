@@ -67,22 +67,12 @@ internal sealed class AppDbContext:IdentityDbContext<AppUser,AppRole,Guid>, IUni
     }
 
     public Task<int> SaveChangesAsync(Guid? appUserId ,CancellationToken cancellationToken = default)
-    {
-        //HttpContextAccessor httpContextAccessor = new();
-        //var userId = _currentUserService.UserId;
-            // httpContextAccessor
-            //     .HttpContext!
-            //     .User
-            //     .Claims
-            //     .FirstOrDefault(p => p.Type == "user-id")
-            //     .Value;
-            
-            if (appUserId != null)
-            {
-                ApplyAuditInformation(appUserId);   
-            }
+    { 
+        if (appUserId != null)
+        {
+            ApplyAuditInformation(appUserId);   
+        }
         
-    
         return base.SaveChangesAsync(cancellationToken);
     }
 

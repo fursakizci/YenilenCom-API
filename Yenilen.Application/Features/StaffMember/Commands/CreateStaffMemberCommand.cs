@@ -6,8 +6,9 @@ namespace Yenilen.Application.Features.StaffMember.Commands;
 
 public sealed class CreateStaffMemberCommand:IRequest<Result<CreateStaffMemberCommandResponse>>
 {
-    public string StoreId { get; set; }
-    public string Name { get; set; }
+    public string FirstName { get; set; } = string.Empty;
+
+    public string LastName { get; set; } = string.Empty;
     public string? Email { get; set; }
     public string? PhoneNumber { get; set; }
     //public DateTime? DateOfBirth { get; set; }
@@ -25,8 +26,12 @@ public sealed class CreateStaffMemberCommandValidator : AbstractValidator<Create
 {
     public CreateStaffMemberCommandValidator()
     {
-        RuleFor(x => x.Name)
+        RuleFor(x => x.FirstName)
             .NotEmpty().WithMessage("Ad alanı boş olamaz.")
+            .MinimumLength(3).WithMessage("Ad alanı en az 3 karakter olmalıdır.");
+        
+        RuleFor(x => x.LastName)
+            .NotEmpty().WithMessage("Soyad alanı boş olamaz.")
             .MinimumLength(3).WithMessage("Ad alanı en az 3 karakter olmalıdır.");
     
         RuleFor(x => x.Email)

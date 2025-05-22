@@ -6,6 +6,7 @@ using Yenilen.Application.Auth.Commands;
 using Yenilen.Application.Interfaces;
 using Yenilen.Application.Services;
 using Yenilen.Application.Services.Auth;
+using Yenilen.Application.Services.Common;
 using Yenilen.Domain.Entities;
 using Yenilen.Domain.Users;
 
@@ -20,7 +21,8 @@ internal sealed class RegisterHandler: IRequestHandler<RegisterCommand,Result<Re
     private readonly RoleManager<AppRole> _roleManager;
     private readonly IJwtProvider _jwtProvider;
     private readonly IRefreshTokenRepository _refreshTokenRepository;
-    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IRequestContextService _requsetContextService;
+    private readonly IStoreRepository _storeRepository;
     private readonly ITokenService _tokenService;
     private readonly IUnitOfWork _unitOfWork;
 
@@ -31,7 +33,8 @@ internal sealed class RegisterHandler: IRequestHandler<RegisterCommand,Result<Re
         RoleManager<AppRole> roleManager,
         IJwtProvider jwtProvider,
         IRefreshTokenRepository refreshTokenRepository,
-        IHttpContextAccessor httpContextAccessor,
+        IRequestContextService requestContextService,
+        IStoreRepository storeRepository,
         ITokenService tokenService,
         IUnitOfWork unitOfWork)
     {
@@ -42,7 +45,8 @@ internal sealed class RegisterHandler: IRequestHandler<RegisterCommand,Result<Re
         _roleManager = roleManager;
         _jwtProvider = jwtProvider;
         _refreshTokenRepository = refreshTokenRepository;
-        _httpContextAccessor = httpContextAccessor;
+        _requsetContextService = requestContextService;
+        _storeRepository = storeRepository;
         _tokenService = tokenService;
         _unitOfWork = unitOfWork;
     }
@@ -103,29 +107,21 @@ internal sealed class RegisterHandler: IRequestHandler<RegisterCommand,Result<Re
         
         await CreateRoleSpecificEntity(request, appUser.Id, cancellationToken);
         
-        //IdentityResult roleResult = await _userManager.AddToRoleAsync(appUser, request.Role);
-
-        // if (!roleResult.Succeeded)
-        // {
-        //     await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-        //     var errors = roleResult.Errors.Select(e => e.Description).ToList();
-        //     return Result<RegisterCommandResponse>.Failure(errors);
-        // }
-        
-            var (accessToken, refreshToken) = await _tokenService.GenerateTokensAsync(appUser);
-            await _refreshTokenRepository.AddAsync(refreshToken);
+       
+        var (accessToken, refreshToken) = await _tokenService.GenerateTokensAsync(appUser);
+        await _refreshTokenRepository.AddAsync(refreshToken);
             
-            _jwtProvider.WriteAuthTokenAsHttpOnlyCookie("ACCESS_TOKEN", accessToken);
-            _jwtProvider.WriteAuthTokenAsHttpOnlyCookie("REFRESH_TOKEN", refreshToken.Token);
+        _jwtProvider.WriteAuthTokenAsHttpOnlyCookie("ACCESS_TOKEN", accessToken);
+        _jwtProvider.WriteAuthTokenAsHttpOnlyCookie("REFRESH_TOKEN", refreshToken.Token);
             
-            await _unitOfWork.SaveChangesAsync(appUser.Id,cancellationToken);
-            await _unitOfWork.CommitTransactionAsync(cancellationToken);
+        await _unitOfWork.SaveChangesAsync(appUser.Id,cancellationToken);
+        await _unitOfWork.CommitTransactionAsync(cancellationToken);
             
-            return Result<RegisterCommandResponse>.Succeed(new RegisterCommandResponse
-            {
+           return Result<RegisterCommandResponse>.Succeed(new RegisterCommandResponse
+           {
                 UserId = appUser.Id.ToString(),
                 Role = request.Role
-            });
+            }); 
         }
         catch(Exception ex)
         {
@@ -197,18 +193,30 @@ internal sealed class RegisterHandler: IRequestHandler<RegisterCommand,Result<Re
             
             case RoleNames.Staff:
 
-                if (!request.StoreId.HasValue || request.StoreId.Value <= 0)
+                var storeOwnerAppUserId = _requsetContextService.GetCurrentUserId();
+                
+                if (storeOwnerAppUserId == null)
                 {
-                    return Result<int>.Failure("Staff rolü için geçerli bir StoreId belirtilmelidir.");
+                    await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+                    return Result<int>.Failure("Staff rolü için geçerli magaza sahibi olarak giris yapmalisiz.");
                 }
 
+                var store =
+                    await _storeRepository.GetStoreByUserIdAsync(storeOwnerAppUserId);
+                
+                if (store == null)
+                {
+                    await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+                    return Result<int>.Failure("Calisan için geçerli magaza bulunamadi."); 
+                }
+                
                 var staff = new Staff()
                 {
                     FirstName = request.FirstName,
                     LastName = request.LastName,
                     PhoneNumber = request.PhoneNumber,
                     Email = request.Email,
-                    StoreId = request.StoreId.Value,
+                    StoreId = store.Id,
                     AppUserId = appUserId
                 };
 

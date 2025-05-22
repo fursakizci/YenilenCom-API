@@ -30,26 +30,26 @@ public class AdminController:ControllerBase
         return Ok(result);
     }
 
-    [HttpPost("staff/create")]
-    [Authorize(Policy = PolicyNames.RequireStoreOwner)]
-    public async Task<IActionResult> CreateStaff([FromBody] CreateStaffMemberCommand command)
-    {
-        var staffId = await _mediator.Send(command);
-        return Ok(new{ Id = staffId });
-    }
+    // [HttpPost("staff/create")]
+    // [Authorize(Policy = PolicyNames.RequireStoreOwner)]
+    // public async Task<IActionResult> CreateStaff([FromBody] CreateStaffMemberCommand command)
+    // {
+    //     var staffId = await _mediator.Send(command);
+    //     return Ok(new{ Id = staffId });
+    // }
 
-    [HttpPost("staff/assign-working-times")]
-    public async Task<IActionResult> AssignWorkingTimes()
-    {
-        return Ok();
-    }
+    // [HttpPost("staff/assign-working-times")]
+    // public async Task<IActionResult> AssignWorkingTimes()
+    // {
+    //     return Ok();
+    // }
 
-    [HttpPut("update")]
-    [Authorize(Policy = PolicyNames.RequireStoreOwner)]
-    public async Task<IActionResult> UpdateStore()
-    {
-        return Ok();
-    }
+    // [HttpPut("update")]
+    // [Authorize(Policy = PolicyNames.RequireStoreOwner)]
+    // public async Task<IActionResult> UpdateStore()
+    // {
+    //     return Ok();
+    // }
 
     [HttpPut("update/opening-times")]
     [Authorize(Policy = PolicyNames.RequireStoreOwner)]

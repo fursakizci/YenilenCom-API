@@ -12,18 +12,19 @@ public class StaffMappingProfile:Profile
     {
         CreateMap<Staff, StaffDto>()
             .ForMember(s => s.StoreId, opt => opt.MapFrom(src => src.Id))
-            .ForMember(s => s.Name, opt => opt.MapFrom(src => src.Name))
+            .ForMember(s => s.FirstName, opt => opt.MapFrom(src => src.FirstName))
+            .ForMember(s => s.LastName, opt => opt.MapFrom(src => src.LastName))
             .ForMember(s => s.ImageUrl, opt => opt.MapFrom(src => src.Image.ImageUrl));
         
         CreateMap<Staff, GetStaffMembersByStoryIdQueryResponse>()
             .ForMember(s => s.StoreId, opt => opt.MapFrom(src => src.Id))
-            .ForMember(s => s.Name, opt => opt.MapFrom(src => src.Name))
+            .ForMember(s => s.Name, opt => opt.MapFrom(src => src.FullName))
             .ForMember(s => s.ImageUrl, opt => opt.MapFrom(src => src.Image.ImageUrl));
 
         
         CreateMap<CreateStaffMemberCommand, Staff>()
-            .ForMember(s => s.StoreId, opt => opt.MapFrom(src => src.StoreId))
-            .ForMember(s => s.Name, opt => opt.MapFrom(src => src.Name))
+            .ForMember(s => s.FirstName, opt => opt.MapFrom(src => src.FirstName))
+            .ForMember(s => s.LastName, opt => opt.MapFrom(src => src.LastName))
             .ForMember(s => s.Email, opt => opt.MapFrom(src => src.Email))
             .ForMember(s => s.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
             .ForMember(s => s.Bio, opt => opt.MapFrom(src => src.Bio))

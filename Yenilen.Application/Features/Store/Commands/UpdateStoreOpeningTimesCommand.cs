@@ -6,7 +6,6 @@ namespace Yenilen.Application.Features.Store.Commands;
 
 public sealed class UpdateStoreOpeningTimesCommand:IRequest<Result<UpdateStoreOpeningTimesCommandResponse>>
 {
-    public int StoreId { get; set; }
     public List<StoreWorkingHourDto> StoreWorkingHours { get; set; } = new();
 }
 

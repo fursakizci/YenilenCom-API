@@ -13,7 +13,11 @@ internal sealed class StaffConfiguration : IEntityTypeConfiguration<Staff>
             .HasForeignKey<Staff>(so => so.AppUserId)
             .OnDelete(DeleteBehavior.Cascade);
         
-        builder.Property(s => s.Name)
+        builder.Property(s => s.FirstName)
+            .IsRequired()
+            .HasMaxLength(100);
+        
+        builder.Property(s => s.LastName)
             .IsRequired()
             .HasMaxLength(100);
         
