@@ -9,7 +9,7 @@ public class StoreWorkingHourProfile:Profile
 {
     public StoreWorkingHourProfile()
     {
-        CreateMap<Store, StoreIndividualDto>()
+        CreateMap<Store, StoreDetailsDto>()
             .ForMember(s => s.Name, opt => opt.MapFrom(src => src.StoreName))
             .ForMember(s => s.Address, opt => opt.MapFrom(src => src.Address))
             .ForMember(s => s.Images, opt => opt.MapFrom(src => src.Images))

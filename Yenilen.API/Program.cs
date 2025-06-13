@@ -26,7 +26,8 @@ builder.Services.AddCors(options =>
                     "https://yenilen-com-client.vercel.app",
                     "http://localhost:3000")
                 .AllowAnyHeader()
-                .AllowAnyMethod();
+                .AllowAnyMethod()
+                .AllowCredentials();
         });
 });
 

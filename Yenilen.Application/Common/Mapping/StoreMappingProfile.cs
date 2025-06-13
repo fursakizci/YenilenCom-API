@@ -1,5 +1,7 @@
 using AutoMapper;
 using Yenilen.Application.DTOs;
+using Yenilen.Application.Features.Store.Queries;
+using Yenilen.Domain.DTOs;
 using Yenilen.Domain.Entities;
 
 namespace Yenilen.Application.Common.Mapping;
@@ -8,7 +10,7 @@ public class StoreMappingProfile:Profile
 {
     public StoreMappingProfile()
     {
-        CreateMap<Store, StoreIndividualDto>()
+        CreateMap<Store, StoreDetailsDto>()
             .ForMember(s => s.Name, opt => opt.MapFrom(src => src.StoreName))
             .ForMember(s => s.Address, opt => opt.MapFrom(src => src.Address))
             .ForMember(s => s.Images, opt => opt.MapFrom(src => src.Images))
@@ -17,6 +19,10 @@ public class StoreMappingProfile:Profile
             .ForMember(s => s.Categories, opt => opt.MapFrom(src => src.Categories))
             .ForMember(s => s.StaffMembers, opt => opt.MapFrom(src => src.StaffMembers))
             .ForMember(s => s.About, opt => opt.MapFrom(src => src.About));
+        
+        CreateMap<StoreSearchResultDto, GetStoresQueryResponse>();
+        CreateMap<Domain.DTOs.ServiceDto, Application.DTOs.ServiceDto>();
+        
     }
     
 }

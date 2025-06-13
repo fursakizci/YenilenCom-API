@@ -56,8 +56,21 @@ internal sealed class JwtProvider(IOptions<JwtOptions> options, IHttpContextAcce
         httpContextAccessor?.HttpContext?.Response.Cookies.Append(cookieName,token,
             new CookieOptions
             {
-                HttpOnly = false,
+                HttpOnly = true,
                 Expires = DateTime.UtcNow.AddHours(options.Value.ExpirationTimeInHour),
+                IsEssential = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict
+            });
+    }
+
+    public void ExpireAuthTokenCookie(string cookieName)
+    {
+        httpContextAccessor?.HttpContext?.Response.Cookies.Append(cookieName, "",
+            new CookieOptions
+            {
+                Expires = DateTime.UtcNow.AddDays(-1),
+                HttpOnly = true,
                 IsEssential = true,
                 Secure = true,
                 SameSite = SameSiteMode.Strict

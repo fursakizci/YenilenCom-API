@@ -7,8 +7,8 @@ namespace Yenilen.Domain.Entities;
 public class StoreOwner : BaseEntity
 {
     // Identity ilişkisi
-    public Guid AppUserId { get; set; }
-    public AppUser AppUser { get; set; } = default!;
+    public Guid? AppUserId { get; set; }
+    public AppUser? AppUser { get; set; } 
     
     // Kişisel bilgiler
     public string FirstName { get; set; }

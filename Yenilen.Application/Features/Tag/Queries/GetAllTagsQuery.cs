@@ -4,7 +4,7 @@ using Yenilen.Application.DTOs;
 
 namespace Yenilen.Application.Features.Tag.Queries;
 
-public class GetAllTagsQuery :IRequest<Result<List<GetAllTagsQueryResponse>>>
+public sealed class GetAllTagsQuery :IRequest<Result<List<GetAllTagsQueryResponse>>>
 {
     
 }

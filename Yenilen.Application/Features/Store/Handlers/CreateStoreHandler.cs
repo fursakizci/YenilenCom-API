@@ -5,6 +5,7 @@ using Yenilen.Application.Features.Store.Commands;
 using Yenilen.Application.Interfaces;
 using Yenilen.Application.Services;
 using Yenilen.Application.Services.Common;
+using Yenilen.Domain.Entities;
 
 namespace Yenilen.Application.Features.Store.Handlers;
 
@@ -12,6 +13,7 @@ internal sealed class CreateStoreHandler:IRequestHandler<CreateStoreCommand, Res
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IStoreRepository _storeRepository;
+    private readonly IAddressRepository _addressRepository;
     private readonly ITagRepository _tagRepository;
     private readonly IStoreOwnerRepository _storeOwnerRepository;
     private readonly IRequestContextService _requestContextService;
@@ -19,6 +21,7 @@ internal sealed class CreateStoreHandler:IRequestHandler<CreateStoreCommand, Res
     
     public CreateStoreHandler(IUnitOfWork unitOfWork, 
         IStoreRepository storeRepository, 
+        IAddressRepository addressRepository,
         ITagRepository tagRepository, 
         IStoreOwnerRepository storeOwnerRepository,
         IRequestContextService requestContextService,
@@ -26,6 +29,7 @@ internal sealed class CreateStoreHandler:IRequestHandler<CreateStoreCommand, Res
     {
         _unitOfWork = unitOfWork;
         _storeRepository = storeRepository;
+        _addressRepository = addressRepository;
         _tagRepository = tagRepository;
         _storeOwnerRepository = storeOwnerRepository;
         _requestContextService = requestContextService;
@@ -42,7 +46,6 @@ internal sealed class CreateStoreHandler:IRequestHandler<CreateStoreCommand, Res
 
             if (appUserId == null)
             {
-                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                 return Result<CreateStoreCommandResponse>.Failure($"Bu kullanici bulunamadi.");
             }
 
@@ -50,18 +53,31 @@ internal sealed class CreateStoreHandler:IRequestHandler<CreateStoreCommand, Res
             
             if (storeOwner.Store != null)
             {
-                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                 return Result<CreateStoreCommandResponse>.Failure($"Bu kullanici adina magaza kaydi bulunmaktadir.");
             }
             
+            var address = _mapper.Map<Address>(request.Address);
+
+            address.CreateUserId = appUserId.Value;
+
+            if (address is null)
+            {
+                return Result<CreateStoreCommandResponse>.Failure("Address map islemi basariz oldu.");
+            }
+
+            await _addressRepository.AddAsync(address, cancellationToken);
+                
             var store = _mapper.Map<Domain.Entities.Store>(request);
 
             if (store is null)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                 return Result<CreateStoreCommandResponse>.Failure("Store map islemi basariz oldu.");
             }
+
+            store.AddressId = address.Id;
             
-            await _storeRepository.AddAsync(store);
+            await _storeRepository.AddAsync(store, cancellationToken);
             
             storeOwner.Store = store;
             

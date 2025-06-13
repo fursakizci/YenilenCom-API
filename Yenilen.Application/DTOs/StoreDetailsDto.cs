@@ -1,6 +1,6 @@
 namespace Yenilen.Application.DTOs;
 
-public class StoreIndividualDto
+public class StoreDetailsDto
 {
     public string Name { get; set; }
     public AddressDto Address { get; set; }

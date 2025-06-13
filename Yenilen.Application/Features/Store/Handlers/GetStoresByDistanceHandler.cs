@@ -52,7 +52,7 @@ internal sealed class GetStoresByDistanceHandler:IRequestHandler<GetStoresByDist
                     .SelectMany(c => c.Services)
                     .Select(s => new ServiceDto
                     {
-                        ServiceId = s.Id,
+                        ServiceId = s.Id.ToString(),
                         Name = s.Name,
                         Price = s.Price,
                         Duration = s.Duration.ToString()

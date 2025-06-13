@@ -105,8 +105,13 @@ internal sealed class RegisterHandler: IRequestHandler<RegisterCommand,Result<Re
             return Result<RegisterCommandResponse>.Failure($"AppUser kaydi basarisiz.{errors}");
         }
         
-        await CreateRoleSpecificEntity(request, appUser.Id, cancellationToken);
-        
+        var roleSpecificEntity = await CreateRoleSpecificEntity(request, appUser.Id, cancellationToken);
+
+        if (!roleSpecificEntity.IsSuccessful)
+        { 
+            await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+            return Result<RegisterCommandResponse>.Failure(roleSpecificEntity.ErrorMessages ?? new List<string>());
+        }
        
         var (accessToken, refreshToken) = await _tokenService.GenerateTokensAsync(appUser);
         await _refreshTokenRepository.AddAsync(refreshToken);
@@ -197,7 +202,6 @@ internal sealed class RegisterHandler: IRequestHandler<RegisterCommand,Result<Re
                 
                 if (storeOwnerAppUserId == null)
                 {
-                    await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                     return Result<int>.Failure("Staff rolü için geçerli magaza sahibi olarak giris yapmalisiz.");
                 }
 
@@ -206,7 +210,6 @@ internal sealed class RegisterHandler: IRequestHandler<RegisterCommand,Result<Re
                 
                 if (store == null)
                 {
-                    await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                     return Result<int>.Failure("Calisan için geçerli magaza bulunamadi."); 
                 }
                 

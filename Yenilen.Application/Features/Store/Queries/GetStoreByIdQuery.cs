@@ -6,11 +6,12 @@ namespace Yenilen.Application.Features.Store.Queries;
 
 public sealed class GetStoreByIdQuery:IRequest<Result<GetStoreByIdQueryResponse>>
 {
-    public int StoreId { get; set; }
+    public string StoreId { get; set; }
 }
 
 public sealed class GetStoreByIdQueryResponse
 {
+    public int Id { get; set; }
     public string Name { get; set; }
     public AddressDto Address { get; set; }
     public List<ImageDto> Images { get; set; }

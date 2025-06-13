@@ -18,12 +18,18 @@ internal sealed class GetCategoriesByStoreIdHandler: IRequestHandler<GetCategori
         _mapper = mapper;
     }
     
-    public Task<Result<List<GetCategoriesByStoreIdQueryResponse>>> Handle(GetCategoriesByStoreIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<List<GetCategoriesByStoreIdQueryResponse>>> Handle(GetCategoriesByStoreIdQuery request, CancellationToken cancellationToken)
     {
-        var query = _categoryRepository.Where(x => x.StoreId == request.StoreId).ToList();
+
+        if (!int.TryParse(request.StoreId, out int storeId))
+        {
+            return Result<List<GetCategoriesByStoreIdQueryResponse>>.Failure("Dogru store id degeri girin.");
+        }
+        
+        var query = await _categoryRepository.GetCategoriesWithServicesByStoreIdAsync(storeId);
 
         var categories = _mapper.Map<List<GetCategoriesByStoreIdQueryResponse>>(query);
-        
-        return Task.FromResult(Result<List<GetCategoriesByStoreIdQueryResponse>>.Succeed(categories));
+
+        return Result<List<GetCategoriesByStoreIdQueryResponse>>.Succeed(categories);
     }
 }

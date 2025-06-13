@@ -7,7 +7,7 @@ using Yenilen.Application.Interfaces;
 
 namespace Yenilen.Application.Features.Tag.Handler;
 
-public class GetAllTagsHandler:IRequestHandler<GetAllTagsQuery,Result<List<GetAllTagsQueryResponse>>>
+internal sealed class GetAllTagsHandler:IRequestHandler<GetAllTagsQuery,Result<List<GetAllTagsQueryResponse>>>
 {
     private readonly ITagRepository _tagRepository;
     private readonly IMapper _mapper;

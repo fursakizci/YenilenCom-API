@@ -19,4 +19,10 @@ internal sealed class CategoryRepository:GenericRepository<Category,AppDbContext
     {
         return await _dbSet.Where(c => c.StoreId == id).ToListAsync();
     }
+
+    public async Task<IEnumerable<Category>> GetCategoriesWithServicesByStoreIdAsync(int storeId)
+    {
+        return await _dbSet.Where(c => c.StoreId == storeId)
+            .Include(c => c.Services).ToListAsync();
+    }
 }

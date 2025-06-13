@@ -51,4 +51,12 @@ internal sealed class CustomerRepository : GenericRepository<Customer, AppDbCont
     {
         return await _dbSet.Where(u => u.AppUserId == userId).FirstOrDefaultAsync();
     }
+
+    public async Task<Customer?> GetCustomerWithAvatarAndAddressesAsync(Guid? userId, CancellationToken cancellationToken)
+    {
+        return await _dbSet
+            .Include(u => u.Addresses)
+            .Include(u => u.AvatarUrl)
+            .FirstOrDefaultAsync(u=>u.AppUserId == userId, cancellationToken);
+    }
 }

@@ -52,8 +52,31 @@ public static class InfrastructureRegistrar
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            //options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
-        }).AddJwtBearer();
+        }).AddJwtBearer(options =>
+        {
+            // Burada token validation parametrelerini de ekleyebilirsin.
+            // options.TokenValidationParameters = new TokenValidationParameters { ... };
+
+            // En önemli kısım burası:
+            options.Events = new Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerEvents
+            {
+                OnMessageReceived = context =>
+                {
+                    if (string.IsNullOrEmpty(context.Token))
+                    {
+                        var accessToken = context.Request.Cookies["ACCESS_TOKEN"];
+                        if (!string.IsNullOrEmpty(accessToken))
+                        {
+                            context.Token = accessToken;
+                        }
+                    }
+                    return Task.CompletedTask;
+                }
+            };
+        });
+        
+        
+        
         services.AddAuthorization();
         //services.AddKeycloakWebApiAuthentication(configuration);
         //services.AddAuthorization().AddKeycloakAuthorization(configuration);

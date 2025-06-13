@@ -22,4 +22,15 @@ internal sealed class TagRepository:GenericRepository<Tag, AppDbContext>,ITagRep
 
         return await _dbSet.Where(tag => tagIds.Contains(tag.Id)).ToListAsync();
     }
+
+    public async Task<IEnumerable<Tag>?> SearchTagsByNameAsync(string? query, int maxResutls, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(query))
+            return Enumerable.Empty<Tag>();
+        
+        return await _dbSet.Where(t => t.Name.ToLower().Contains(query.ToLower()))
+            .OrderBy(t => t.Name)
+            .Take(maxResutls)
+            .ToListAsync(cancellationToken);
+    }
 }

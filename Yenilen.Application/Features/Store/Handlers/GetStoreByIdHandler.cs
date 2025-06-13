@@ -22,12 +22,18 @@ internal sealed class GetStoreByIdHandler:IRequestHandler<GetStoreByIdQuery,Resu
     
     public async Task<Result<GetStoreByIdQueryResponse>> Handle(GetStoreByIdQuery request, CancellationToken cancellationToken)
     {
-        var store = await _storeRepository.GetStoreWithDetailsAsync(request.StoreId);
-        var storeRating = await _reviewRepository.GetStoreRatingByStoreId(request.StoreId);
+        if (!int.TryParse(request.StoreId, out int storeId))
+        {
+            return Result<GetStoreByIdQueryResponse>.Failure("Dogru store id degeri girin."); 
+        }
+            
+        var store = await _storeRepository.GetStoreWithDetailsAsync(storeId);
+        var storeRating = await _reviewRepository.GetStoreRatingByStoreId(storeId);
         // var resume = _mapper.Map<StoreIndividualDto>(store);
         // resume.Rating = storeRating;
-        var resume = new GetStoreByIdQueryResponse
+        var response = new GetStoreByIdQueryResponse
         {
+            Id = store.Id,
             Name = store.StoreName,
             Address = new AddressDto
             {
@@ -46,7 +52,7 @@ internal sealed class GetStoreByIdHandler:IRequestHandler<GetStoreByIdQuery,Resu
             {
                 Url = img.ImageUrl
             }).ToList(),
-            StoreWorkingHours = store.WorkingHours.Select(wh => new StoreWorkingHourDto
+            StoreWorkingHours = store.StoreWorkingHours.Select(wh => new StoreWorkingHourDto
             {
                 OpeningTime = wh.OpeningTime,
                 ClosingTime = wh.ClosingTime,
@@ -55,24 +61,34 @@ internal sealed class GetStoreByIdHandler:IRequestHandler<GetStoreByIdQuery,Resu
             }).ToList(),
             Reviews = store.Reviews.Select(r => new ReviewDto
             {
-                // TODO: Populate properties accordingly
+                Id = r.Id,
+                Text = r.Text,
+                CreatedAt = r.CreatedAt
             }).ToList(),
             Categories = store.Categories.Select(c => new CategoryDto
             {
-                Id = c.Id,
+                Id = c.Id.ToString(),
                 Name = c.Name,
-                Services = c.Services.Select(s => new ServiceDto
+                Services = c.Services.Select(se => new ServiceDto
                 {
-                    // TODO: Populate service properties accordingly
+                    CategoryId = se.CategoryId.ToString(),
+                    ServiceId = se.Id.ToString(),
+                    Name = se.Name,
+                    Price = se.Price,
+                    Duration = se.Duration.TotalMinutes.ToString()
                 }).ToList()
             }).ToList(),
             StaffMembers = store.StaffMembers.Select(s => new StaffDto
             {
-                // TODO: Populate staff properties accordingly
+                Id = s.Id,
+                FirstName = s.FirstName,
+                LastName = s.LastName,
+                ImageUrl = s.Image.ImageUrl
             }).ToList(),
             About = store.About,
             Rating = storeRating
         };
-        return Result<GetStoreByIdQueryResponse>.Succeed(resume);
+        
+         return Result<GetStoreByIdQueryResponse>.Succeed(response);
     }
 }

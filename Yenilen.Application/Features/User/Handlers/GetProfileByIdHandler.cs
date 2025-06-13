@@ -7,7 +7,7 @@ using Yenilen.Application.Services.Common;
 
 namespace Yenilen.Application.Features.User.Handlers;
 
-public class GetProfileByIdHandler : IRequestHandler<GetProfileByIdQuery, Result<GetProfileByIdQueryResponse>>
+internal sealed class GetProfileByIdHandler : IRequestHandler<GetProfileByIdQuery, Result<GetProfileByIdQueryResponse>>
 {
     private readonly ICustomerRepository _customerRepository;
     private readonly IRequestContextService _requestContextService;
@@ -40,6 +40,7 @@ public class GetProfileByIdHandler : IRequestHandler<GetProfileByIdQuery, Result
             Id = user.Id.ToString(),
             FirstName = user.FirstName,
             LastName = user.LastName,
+            FullName = user.FullName,
             Initials = $"{(user.FirstName?.FirstOrDefault().ToString().ToUpper() ?? "")}{(user.LastName?.FirstOrDefault().ToString().ToUpper() ?? "")}",
             MobileNumber = user.PhoneNumber,
             Email = user.Email,

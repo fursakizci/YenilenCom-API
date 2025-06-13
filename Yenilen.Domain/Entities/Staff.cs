@@ -11,7 +11,7 @@ public class Staff:BaseEntity
     public string LastName { get; set; }
     public int StoreId { get; set; }
     public Store Store { get; set; }
-    public string FullName => $"{FirstName} {LastName}"; 
+    public string FullName => $"{FirstName} {LastName}";
     
     public string? PhoneNumber { get; set; }
     public string? Email { get; set; }

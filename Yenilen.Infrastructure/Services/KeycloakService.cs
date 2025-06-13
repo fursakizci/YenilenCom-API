@@ -306,4 +306,9 @@ public sealed class KeycloakService(
     {
         throw new NotImplementedException();
     }
+
+    public void ExpireAuthTokenCookie(string cookieName)
+    {
+        throw new NotImplementedException();
+    }
 }

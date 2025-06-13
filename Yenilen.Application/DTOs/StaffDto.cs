@@ -2,6 +2,7 @@ namespace Yenilen.Application.DTOs;
 
 public class StaffDto
 {
+    public int Id { get; set; }
     public int StoreId { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }

@@ -2,7 +2,7 @@ namespace Yenilen.Application.DTOs;
 
 public class CategoryDto
 {
-    public int Id { get; set; }
+    public string Id { get; set; }
     public string Name { get; set; }
     public List<ServiceDto> Services { get; set; }
 }

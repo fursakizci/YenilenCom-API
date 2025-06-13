@@ -8,4 +8,5 @@ public interface IJwtProvider
     public string GenerateRefreshToken();
 
     public void WriteAuthTokenAsHttpOnlyCookie(string cookieName, string token);
+    public void ExpireAuthTokenCookie(string cookieName);
 }

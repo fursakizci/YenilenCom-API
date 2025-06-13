@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Yenilen.Application.Features.Search.Queries;
 using Yenilen.Application.Features.Store.Queries;
 using Yenilen.Application.Features.Tag.Commands;
 using Yenilen.Application.Features.Tag.Queries;
@@ -31,15 +32,22 @@ public class SearchController:ControllerBase
         return Ok(result);
     }
 
-    // [HttpPost("create-tag")]
-    // public async Task<IActionResult> CreateTag([FromBody] CreateTagCommand command)
-    // {
-    //     var result = await _mediator.Send(command);
-    //     return Ok(result);
-    // }
+    [HttpGet("searchInput")]
+    public async Task<IActionResult> SearchInputForStoresAndTags([FromQuery] GetStoresAndTagsQuery query)
+    {
+        var result = await _mediator.Send(query);
+        return Ok(result);
+    }
 
-    [HttpGet("searchBar")]
+    [HttpGet("searchBar-justCertainField")]
     public async Task<IActionResult> GetStoresFromSearchBar([FromQuery] GetStoresFromSearchBarQuery query)
+    {
+        var result = await _mediator.Send(query);
+        return Ok(result);
+    }
+
+    [HttpGet("stores")]
+    public async Task<IActionResult> GetStores([FromQuery] GetStoresQuery query)
     {
         var result = await _mediator.Send(query);
         return Ok(result);

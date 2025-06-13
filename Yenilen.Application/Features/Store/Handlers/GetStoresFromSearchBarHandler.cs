@@ -39,7 +39,7 @@ internal sealed class GetStoresFromSearchBarHandler:IRequestHandler<GetStoresFro
                 ImageUrls = s.Images.Select(i => i.ImageUrl).ToList(),
                 Services = s.Categories.SelectMany(c => c.Services.Select(s => new ServiceDto
                 {
-                    ServiceId = s.Id,
+                    ServiceId = s.Id.ToString(),
                     Name = s.Name,
                     Price = s.Price,
                     Duration = s.Duration.TotalMinutes.ToString()
