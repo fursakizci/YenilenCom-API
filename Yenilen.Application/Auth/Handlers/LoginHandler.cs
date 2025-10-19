@@ -50,7 +50,7 @@ internal sealed class LoginHandler:IRequestHandler<LoginCommand,Result<LoginComm
         
         if (appUser is null)
         {
-            return Result<LoginCommandResponse>.Failure("eçersiz email veya şifre.");
+            return Result<LoginCommandResponse>.Failure("geçersiz email veya şifre.");
         }
 
         SignInResult signInResult = await _signInManager.CheckPasswordSignInAsync(appUser, request.Password, true);
