@@ -12,8 +12,8 @@ using Yenilen.Infrastructure.DataAccess;
 namespace Yenilen.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250529063223_mig_10")]
-    partial class mig_10
+    [Migration("20250825015353_mig_1")]
+    partial class mig_1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -865,7 +865,7 @@ namespace Yenilen.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid>("AppUserId")
+                    b.Property<Guid?>("AppUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("CompanyName")
@@ -1414,8 +1414,7 @@ namespace Yenilen.Infrastructure.Migrations
                     b.HasOne("Yenilen.Domain.Users.AppUser", "AppUser")
                         .WithOne()
                         .HasForeignKey("Yenilen.Domain.Entities.StoreOwner", "AppUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Yenilen.Domain.Entities.Image", "ProfileImage")
                         .WithMany()

@@ -27,10 +27,34 @@ namespace Yenilen.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Tags",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    ImageUrl = table.Column<string>(type: "text", nullable: false),
+                    Uuid = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreateUserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UpdateUserId = table.Column<Guid>(type: "uuid", nullable: true),
+                    DeleteUserId = table.Column<Guid>(type: "uuid", nullable: true),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    DeleteAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tags", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetUsers",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uuid", nullable: false),
                     FirstName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     LastName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     CreateUserId = table.Column<Guid>(type: "uuid", nullable: false),
@@ -59,41 +83,12 @@ namespace Yenilen.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Tags",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    ImageUrl = table.Column<string>(type: "text", nullable: false),
-                    Uuid = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreateUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    UpdateUserId = table.Column<Guid>(type: "uuid", nullable: true),
-                    DeleteUserId = table.Column<Guid>(type: "uuid", nullable: true),
-                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    DeleteAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tags", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserRoles",
-                columns: table => new
-                {
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    RoleId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserRoles", x => new { x.RoleId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -359,14 +354,14 @@ namespace Yenilen.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    AppUserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    AppUserId = table.Column<Guid>(type: "uuid", nullable: true),
                     FirstName = table.Column<string>(type: "text", nullable: false),
                     LastName = table.Column<string>(type: "text", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: false),
                     Email = table.Column<string>(type: "text", nullable: false),
                     DateOfBirth = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     Gender = table.Column<int>(type: "integer", nullable: true),
-                    CompanyName = table.Column<string>(type: "text", nullable: false),
+                    CompanyName = table.Column<string>(type: "text", nullable: true),
                     TaxNumber = table.Column<string>(type: "text", nullable: true),
                     CompanyRegistrationNumber = table.Column<string>(type: "text", nullable: true),
                     ImageId = table.Column<int>(type: "integer", nullable: true),
@@ -388,7 +383,7 @@ namespace Yenilen.Infrastructure.Migrations
                         column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_StoreOwners_Images_ImageId",
                         column: x => x.ImageId,
@@ -403,13 +398,14 @@ namespace Yenilen.Infrastructure.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     StoreOwnerId = table.Column<int>(type: "integer", nullable: false),
-                    StoreName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    ManagerName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    ManagerPhone = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                    AddressId = table.Column<int>(type: "integer", nullable: false),
+                    StoreName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    ManagerName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    ManagerPhone = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    AddressId = table.Column<int>(type: "integer", nullable: true),
                     MobileNumber = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
                     PhoneNumber = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
                     About = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
+                    IsConfirm = table.Column<bool>(type: "boolean", nullable: false),
                     Uuid = table.Column<Guid>(type: "uuid", nullable: false),
                     CreateUserId = table.Column<Guid>(type: "uuid", nullable: false),
                     UpdateUserId = table.Column<Guid>(type: "uuid", nullable: true),
@@ -434,7 +430,7 @@ namespace Yenilen.Infrastructure.Migrations
                         column: x => x.StoreOwnerId,
                         principalTable: "StoreOwners",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -444,13 +440,14 @@ namespace Yenilen.Infrastructure.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     AppUserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    FirstName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    LastName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     StoreId = table.Column<int>(type: "integer", nullable: false),
-                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     PhoneNumber = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
                     Email = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: true),
                     IsAvailable = table.Column<bool>(type: "boolean", nullable: false),
                     Bio = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
-                    ImageId = table.Column<int>(type: "integer", nullable: false),
+                    ImageId = table.Column<int>(type: "integer", nullable: true),
                     Uuid = table.Column<Guid>(type: "uuid", nullable: false),
                     CreateUserId = table.Column<Guid>(type: "uuid", nullable: false),
                     UpdateUserId = table.Column<Guid>(type: "uuid", nullable: true),
@@ -664,6 +661,11 @@ namespace Yenilen.Infrastructure.Migrations
                 table: "AspNetUsers",
                 column: "PhoneNumber",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_RoleId",
+                table: "AspNetUsers",
+                column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
@@ -880,9 +882,6 @@ namespace Yenilen.Infrastructure.Migrations
                 name: "AppointmentService");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
                 name: "Favourites");
 
             migrationBuilder.DropTable(
@@ -899,9 +898,6 @@ namespace Yenilen.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "StoreWorkingHour");
-
-            migrationBuilder.DropTable(
-                name: "UserRoles");
 
             migrationBuilder.DropTable(
                 name: "Appointments");
@@ -935,6 +931,9 @@ namespace Yenilen.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Images");
+
+            migrationBuilder.DropTable(
+                name: "AspNetRoles");
         }
     }
 }
